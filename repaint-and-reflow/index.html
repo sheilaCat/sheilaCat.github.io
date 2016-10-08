@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>重绘与重排 | Something here</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="先阅读浏览器渲染机制，在浏览器渲染中会进行重绘与重排。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重绘与重排">
+<meta property="og:url" content="http://sheilacat.github.io/repaint-and-reflow/index.html">
+<meta property="og:site_name" content="Something here">
+<meta property="og:description" content="先阅读浏览器渲染机制，在浏览器渲染中会进行重绘与重排。">
+<meta property="og:updated_time" content="2016-09-18T07:05:05.647Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重绘与重排">
+<meta name="twitter:description" content="先阅读浏览器渲染机制，在浏览器渲染中会进行重绘与重排。">
+  
+    <link rel="alternate" href="/atom.xml" title="Something here" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Something here</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">This world was never meant for one as beautiful as you.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://sheilacat.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-repaint-and-reflow" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/repaint-and-reflow/" class="article-date">
+  <time datetime="2016-04-01T06:14:00.000Z" itemprop="datePublished">2016-04-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/浏览器相关/">浏览器相关</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      重绘与重排
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>先阅读<strong><em>浏览器渲染机制</em></strong>，在浏览器渲染中会进行重绘与重排。</p>
+<a id="more"></a>
+<p>先阅读<strong><em>浏览器渲染机制</em></strong>，在浏览器渲染中会进行重绘与重排。</p>
+<h2 id="重排与重绘"><a href="#重排与重绘" class="headerlink" title="重排与重绘"></a>重排与重绘</h2><ol>
+<li><p>当render tree中的一部分(或全部)因为元素的规模尺寸，布局，隐藏等改变而需要重新构建。这就称为重排(reflow)。每个页面至少需要一次重排，就是在页面第一次加载的时候。在重排的时候，浏览器会使渲染树中受到影响的部分失效，并重新构造这部分渲染树，完成重排后，浏览器会重新绘制受影响的部分到屏幕中，该过程成为重绘。</p>
+</li>
+<li><p>当render tree中的一些元素需要更新属性，而这些属性只是影响元素的外观，风格，而不会影响布局的，比如background-color。则就叫称为重绘。</p>
+</li>
+</ol>
+<p>注意：重排必将引起重绘，而重绘不一定会引起重排。</p>
+<h2 id="重排何时发生"><a href="#重排何时发生" class="headerlink" title="重排何时发生"></a>重排何时发生</h2><p>当页面布局和几何属性改变时就需要重排。下述情况会发生浏览器重排：</p>
+<ol>
+<li><p>添加或者删除可见的DOM元素；</p>
+</li>
+<li><p>元素位置改变；</p>
+</li>
+<li><p>元素尺寸改变——边距、填充、边框、宽度和高度</p>
+</li>
+<li><p>内容改变——比如文本改变或者图片大小改变而引起的计算值宽度和高度改变；</p>
+</li>
+<li><p>页面渲染初始化；</p>
+</li>
+<li><p>浏览器窗口尺寸改变——resize事件发生时；</p>
+</li>
+</ol>
+<p>重排的花销跟DOM节点所处的层次有关系，层级越高，开销越大。</p>
+<p>以上只是简单列举了出现重排和重绘的情况，附两篇进行详尽列举的文章：</p>
+<ul>
+<li><p>在JavaScript中会引起强制重排和重绘的相关属性和方法：<a href="https://gist.github.com/paulirish/5d52fb081b3570c81e3a" target="_blank" rel="external">What forces layout / reflow</a></p>
+</li>
+<li><p>在CSS中能触发布局、绘制或渲染层合并的属性：<a href="https://csstriggers.com/" target="_blank" rel="external">csstriggers</a></p>
+</li>
+</ul>
+<h2 id="flush队列"><a href="#flush队列" class="headerlink" title="flush队列"></a>flush队列</h2><p>重排和重绘很容易被引起，而且重排的花销也不小，如果每句JS操作都去重排重绘的话，浏览器可能就会受不了。所以很多浏览器都会优化这些操作，浏览器会维护1个队列，把所有会引起重排、重绘的操作放入这个队列，等队列中的操作到了一定的数量或者到了一定的时间间隔，浏览器就会flush队列，进行一个批处理。这样就会让多次的重排、重绘变成一次重排重绘。</p>
+<p>虽然有了浏览器的优化，但有时候我们写的一些代码可能会强制浏览器提前flush队列，这样浏览器的优化可能就起不到作用了。当你请求向浏览器请求一些 style信息的时候，就会让浏览器flush队列，比如：</p>
+<ol>
+<li><p>offsetTop, offsetLeft, offsetWidth, offsetHeight</p>
+</li>
+<li><p>scrollTop/Left/Width/Height</p>
+</li>
+<li><p>clientTop/Left/Width/Height</p>
+</li>
+<li><p>width,height</p>
+</li>
+<li><p>请求了getComputedStyle(), 或者 IE的 currentStyle</p>
+</li>
+</ol>
+<p>当你请求上面的一些属性的时候，浏览器为了给你最精确的值，需要flush队列，因为队列中可能会有影响到这些值的操作。即使你获取元素的布局和样式信息跟最近发生或改变的布局信息无关，浏览器都会强行刷新渲染队列。</p>
+<h2 id="如何减少重排、重绘"><a href="#如何减少重排、重绘" class="headerlink" title="如何减少重排、重绘"></a>如何减少重排、重绘</h2><p>减少重排、重绘其实就是需要减少对render tree的操作（合并多次多DOM和样式的修改），并减少对一些style信息的请求，尽量利用好浏览器的优化策略。具体方法有：</p>
+<ul>
+<li><p>不要单独操作对DOM元素的样式修改，直接改变className，如果动态改变样式，则使用cssText（考虑没有优化的浏览器）</p>
+</li>
+<li><p>让要操作的元素进行”离线处理”，处理完后一起更新</p>
+<p>  <em>a)</em> 使用DocumentFragment进行缓存操作,引发一次重排和重绘；</p>
+<p>  <em>b)</em> 使用display:none技术，只引发两次重排和重绘；</p>
+<p>  <em>c)</em> 使用cloneNode(true or false) 和 replaceChild 技术，引发一次重排和重绘；</p>
+</li>
+<li><p>将需要多次重排的元素，position属性设为absolute或fixed，这样此元素就脱离了文档流，它的变化不会影响到其他元素。例如有动画效果的元素就最好设置为绝对定位。</p>
+</li>
+<li><p>将新建的dom节点操作完毕后在插入到body中。</p>
+</li>
+<li><p>避免强制同步布局事件的发生：尽量不要在布局信息改变时做查询（会导致渲染队列强制刷新）。</p>
+</li>
+<li><p>尽可能避免触发布局：</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">.box &#123;</div><div class="line">  width: <span class="number">20</span>px;</div><div class="line">  height: <span class="number">20</span>px;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Changing width and height</div><div class="line"> * triggers layout.</div><div class="line"> */</div><div class="line">.box--expanded &#123;</div><div class="line">  width: <span class="number">200</span>px;</div><div class="line">  height: <span class="number">350</span>px;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>使用flexbox替代老的布局模型。</p>
+</li>
+<li><p>避免快速连续的布局：不要经常访问会引起浏览器flush队列的属性，如果你确实要访问，利用先读后写的原则。</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">resizeAllParagraphsToMatchBlockWidth</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">  <span class="comment">// Puts the browser into a read-write-read-write cycle.</span></div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; paragraphs.length; i++) &#123;</div><div class="line">    paragraphs[i].style.width = box.offsetWidth + <span class="string">'px'</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们使用<code>先读后写</code>的原则，来修复上述代码中的问题：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Read.</span></div><div class="line"><span class="keyword">var</span> width = box.offsetWidth;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">resizeAllParagraphsToMatchBlockWidth</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; paragraphs.length; i++) &#123;</div><div class="line">    <span class="comment">// Now write.</span></div><div class="line">    paragraphs[i].style.width = width + <span class="string">'px'</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="引用："><a href="#引用：" class="headerlink" title="引用："></a>引用：</h4><p><a href="http://www.css88.com/archives/4996" target="_blank" rel="external">页面重绘和回流以及优化</a></p>
+<p><a href="http://www.cnblogs.com/zichi/p/4720000.html" target="_blank" rel="external">高性能JavaScript 重排与重绘</a></p>
+<p><a href="http://www.phpied.com/rendering-repaint-reflowrelayout-restyle/" target="_blank" rel="external">Rendering: repaint, reflow/relayout, restyle</a></p>
+<p><a href="https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing?hl=en" target="_blank" rel="external">Avoid large, complex layouts and layout thrashing
+</a></p>
+<p><a href="https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing?hl=ch" target="_blank" rel="external">中文翻译 避免大规模、复杂的布局
+</a></p>
+<h4 id="推荐阅读："><a href="#推荐阅读：" class="headerlink" title="推荐阅读："></a>推荐阅读：</h4><p><a href="http://www.ruanyifeng.com/blog/2015/09/web-page-performance-in-depth.html" target="_blank" rel="external">网页性能管理详解</a></p>
+<blockquote>
+<p>这篇文章讲到了使用<code>window.requestAnimationFrame()</code>和<code>window.requestIdleCallback()</code>来调节浏览器重新渲染的时间点。</p>
+<p>另外，这篇文章中，所提到的，不要在写操作之后紧跟一个读操作。也就是<code>flush队列</code>中提到的，本来是会攒一堆重绘重排操作，但紧跟一个读操作之后，为了给你一个准确值，就会立即进行重绘重排。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://sheilacat.github.io/repaint-and-reflow/" data-id="ciu17kraz001j7ceqlauri1la" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/reverse-proxy/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          正向代理与反向代理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/browser-rendering-mechanism/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">浏览器渲染机制</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+	<h3 class="widget-title">PROFILE</h3>
+	<div class="widget">
+		<div class="profile">
+			<img class="profile" />
+		  	<p>SHEILACAT</p>
+		  	<span>You said you grow old with me.</span>
+		  	<p class="link">
+		  		<a class="me-github" target="_blank" href="https://github.com/sheilaCat"></a>
+			  	<a class="me-weibo" href="#"></a>
+			  	<a class="me-zhihu" target="_blank" href="https://www.zhihu.com/people/sheilaCat"></a>
+	  	        
+	  	        	<a class="me-rss" href="/atom.xml"></a>
+		        
+		  	</p>
+	  		<div class="tags">
+	  			<span>这个杀手不太冷</span>
+	  			<span>叔本华迷妹</span>
+	  			<span>前端攻城狮</span>
+	  			<span>可能是个萌妹子</span>
+	  		</div>
+		</div>
+	</div>
+</div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/node-straight-out/">node直出与同构javascript</a>
+          </li>
+        
+          <li>
+            <a href="/learn-es6/">ECMAScript6学习</a>
+          </li>
+        
+          <li>
+            <a href="/javascript-error-handle/">JavaScript错误处理</a>
+          </li>
+        
+          <li>
+            <a href="/create-an-object/">面向对象的程序设计——创建对象</a>
+          </li>
+        
+          <li>
+            <a href="/javascript-memory-leak/">JavaScript内存泄漏与内存管理</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Coffeescript/">Coffeescript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/">node</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端规范化/">前端规范化</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/浏览器相关/">浏览器相关</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络知识/">网络知识</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    <div class="widget-wrap">
+	<h3 class="widget-title">FRIENDS</h3>
+	<div class="widget">
+		<a href="http://blog.chenzuhuang.com/">祖神的博客</a>
+	</div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 SheilaCat<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
