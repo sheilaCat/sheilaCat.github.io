@@ -32,8 +32,9 @@ ga('send', 'pageview');
         </a>
       </div>
       <div class="media-body media-middle">
-        <h4 class="media-heading">关注我的公众号，有问题后台留言~</h4>
-        导入txt文件（或者使用网上的prd转txt工具)即可开始听写！
+        公众号mmincat 后台回复“王路”，即可获取语料库txt
+        <br/>
+        使用说明: 导入以单个词组为一行的txt
       </div>
     </div>
   </p>
@@ -127,7 +128,7 @@ ga('send', 'pageview');
         var el = document.getElementById('main'); 
         
         // 语料库处理
-        const res = txt.match(/\b[A-Za-z]+([\s]+[A-Za-z]+)?\b/g);
+        const res = txt.match(/\b.+\b/g);
         source_chars = res;
         console.log('导入单词:' + res);
         // 重新加载资源库
