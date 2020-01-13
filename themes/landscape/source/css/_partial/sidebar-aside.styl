@@ -1,0 +1,99 @@
+#sidebar
+  @media mq-normal
+    column(sidebar-column)
+
+.widget-wrap
+  margin: block-margin 0
+
+.widget-title
+  @extend $block-caption
+
+.widget
+  color: color-sidebar-text
+  text-shadow: 0 1px #fff
+  background: color-widget-background
+  box-shadow: 0 -1px 4px color-widget-border inset
+  border: 1px solid color-widget-border
+  padding: 15px
+  border-radius: 3px
+  a
+    color: color-link
+    text-decoration: none
+    &:hover
+      text-decoration: underline
+  ul, ol, dl
+    ul, ol, dl
+      margin-left: 15px
+      list-style: disc
+  .profile
+    text-align: center
+    img
+      background: url(profile-url) center #eee
+      height: 100px
+      width: 100px
+      border-radius: 100px 
+      border: 7px solid color-purple
+      background-size: cover
+    p 
+      display: block
+      margin: 20px
+      font-size: 20px
+      color: #000
+    .link 
+      display: inline-block
+    $article-share-link
+      width: 50px
+      height: 36px
+      display: block
+      float: left
+      position: relative
+      color: #999
+      text-shadow: 0 1px #fff
+      &:before
+        font-size: 20px
+        font-family: font-icon
+        absolute-center(@font-size)
+        text-align: center
+      &:hover
+        color: #fff
+    .me-github
+      @extend $article-share-link
+      &:before
+        content: "\f09b"
+      &:hover
+        background: color-purple
+        text-shadow: 0 1px darken(color-purple, 20%)
+    .me-weibo
+      @extend $article-share-link
+      &:before
+        content: "\f18a"
+      &:hover
+        background: color-purple
+        text-shadow: 0 1px darken(color-purple, 20%)  
+    .me-zhihu
+      @extend $article-share-link
+      &:before
+        content: "知"
+        font-weight: 900
+      &:hover
+        background: color-purple
+        text-shadow: 0 1px darken(color-purple, 20%)  
+    .me-rss
+      @extend $article-share-link
+      &:before
+        content: "\f09e"
+      &:hover
+        background: color-purple
+        text-shadow: 0 1px darken(color-purple, 20%)  
+    .tags
+      span
+        border: none
+        color: #fff
+        display: inline-block
+        background-color: color-purple
+        padding: 0 12px
+        font-size: 12px
+        border-radius: 3px
+        line-height: 30px
+        text-shadow: none
+        margin: 2px

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+  <title>Listening Spell</title>
+
+  <!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-66121951-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=53341100" charset="UTF-8"></script>
+
+</head>
+<body onload="checkFileAPI();" class="container">
+
+  <div class="media">
+      <div class="media-left media-middle">
+        <a href="#">
+          <img class="media-object" width="100" src="https://github.com/sheilaCat/sheilacat.github.io/blob/master/img/weixin.png?raw=true" alt="...">
+        </a>
+      </div>
+      <div class="media-body media-middle">
+        公众号mmincat 后台回复“王路”，即可获取语料库txt
+        <br/>
+        使用说明: 导入以单个词组为一行的txt
+      </div>
+    </div>
+  </p>
+
+  <p>
+    <input class="form-control" type="file" onchange="readText(this)" />
+  </p>
+  <div id='checkForm'>
+    <div class="page-header">
+      <h3>Listening Spell</h3>
+    </div>
+    <div id='checkList'></div>
+    <button type="submit" class="btn btn-primary btn-block" onclick="onSubmit()">Submit</button>
+    <p>
+     <div class="progress">
+        <div id="correctRate" class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" style="width: 0%">
+          0%
+        </div>
+      </div>
+    </p>
+    <!-- <div id="main">
+        ...
+    </div> -->
+  </div>
+
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+  <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+
+    /* 读取语料库文件 txt格式 */
+    var reader; //GLOBAL File Reader object for demo purpose only
+    let source_chars = []; // 源语料库
+    /**
+    * Check for the various File API support.
+    */
+    function checkFileAPI() {
+      if (window.File && window.FileReader && window.FileList && window.Blob) {
+        reader = new FileReader();
+        return true; 
+      } else {
+        alert('The File APIs are not fully supported by your browser. Fallback required.');
+        return false;
+      }
+    }
+
+    /**
+    * read text input
+    */
+    function readText(filePath) {
+        var output = ""; //placeholder for text output
+        if(filePath.files && filePath.files[0]) {           
+            reader.onload = function (e) {
+                output = e.target.result;
+                displayContents(output);
+            };//end onload()
+            reader.readAsText(filePath.files[0]);
+        }//end if html5 filelist support
+        else if(ActiveXObject && filePath) { //fallback to IE 6-8 support via ActiveX
+            try {
+                reader = new ActiveXObject("Scripting.FileSystemObject");
+                var file = reader.OpenTextFile(filePath, 1); //ActiveX File Object
+                output = file.ReadAll(); //text contents of file
+                file.Close(); //close file "input stream"
+                displayContents(output);
+            } catch (e) {
+                if (e.number == -2146827859) {
+                    alert('Unable to access local files due to browser security settings. ' + 
+                    'To overcome this, go to Tools->Internet Options->Security->Custom Level. ' + 
+                    'Find the setting for "Initialize and script ActiveX controls not marked as safe" and change it to "Enable" or "Prompt"'); 
+                }
+            }       
+        }
+        else { //this is where you could fallback to Java Applet, Flash or similar
+            return false;
+        }       
+        return true;
+    }   
+
+    /**
+    * display content using a basic HTML replacement
+    */
+    function displayContents(txt) {
+        var el = document.getElementById('main'); 
+        
+        // 语料库处理
+        const res = txt.match(/\b.+\b/g);
+        source_chars = res;
+        console.log('导入单词:' + res);
+        // 重新加载资源库
+        initSource();
+        // el.innerHTML = res; //display output in DOM
+    }   
+
+    /* end of read file */
+
+    function initSource() {
+      
+
+      let source = source_chars || [];
+
+      source.forEach(item => {
+
+        let insertDom = (
+          `<p class="input-group">\
+            <span class="input-group-addon">\
+              <input type="checkbox" disabled>\
+            </span>\
+            <input type="text" class="checkTarget form-control" label="${item}">\
+          </p>`
+        );
+        $(insertDom).appendTo($('#checkList'));
+      });
+    }
+
+    // 提交内容 计算正确度
+    function onSubmit() {
+
+      if ( $('button[type=submit]').hasClass('disabled')) return;
+
+      let allCount = $('#checkList').children().length;
+      let correctCount = 0;
+      $('#checkList').children().each((index, child) => {
+        let item = $(child).find('input.checkTarget')[0];
+        let labels = $(item).attr('label').split('=');
+        labels.forEach(label => {
+          if (label.trim() === item.value) {
+            $(child).find('[type=checkbox]')[0].checked = true;
+            correctCount++;
+            $(child)[0].classList.add('has-success');
+          } else {
+            $('<span class="input-group-addon" id="basic-addon2">' + label + '</span>').insertAfter($(item)[0]);
+            $(child)[0].classList.add('has-error');
+          }
+        })
+
+        // 检查结束后 禁用button按钮的选择
+        $('button[type=submit]')[0].classList.add('disabled')
+        
+      })
+
+      let result = Math.floor(correctCount / allCount * 100);
+      $('#correctRate').attr('style', `width: ${result}%`);
+      $('#correctRate').find('span').innerHTML = result; 
+      $('#correctRate')[0].innerHTML = result + '%';
+    }
+
+    initSource();
+
+  </script>
+</body>
+</html>
