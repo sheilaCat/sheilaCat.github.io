@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>mongodb | Something here</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="#MongoDB MongoDB是一个基于分布式文件存储的数据库。由C++语言编写。旨在为WEB应用提供可扩展的高性能数据库存储解决方案。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mongodb">
+<meta property="og:url" content="http://sheilacat.github.io/mongodb-intro/index.html">
+<meta property="og:site_name" content="Something here">
+<meta property="og:description" content="#MongoDB MongoDB是一个基于分布式文件存储的数据库。由C++语言编写。旨在为WEB应用提供可扩展的高性能数据库存储解决方案。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-06-03T01:23:33.000Z">
+<meta property="article:modified_time" content="2016-09-18T07:27:54.000Z">
+<meta property="article:author" content="SheilaCat">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Something here" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-66121951-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=53341100" charset="UTF-8"></script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Something here</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">This world was never meant for one as beautiful as you.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://sheilacat.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mongodb-intro" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/mongodb-intro/" class="article-date">
+  <time datetime="2015-06-03T01:23:33.000Z" itemprop="datePublished">2015-06-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/mongodb/">mongodb</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mongodb
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#MongoDB</p>
+<p>MongoDB是一个基于分布式文件存储的数据库。由C++语言编写。旨在为WEB应用提供可扩展的高性能数据库存储解决方案。</p>
+<a id="more"></a>
+
+<p>MongoDB是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。</p>
+<p>#NoSQL 简介</p>
+<p>NoSQL(NoSQL = Not Only SQL )，意即”不仅仅是SQL”。</p>
+<p>NoSQL用于超大规模数据的存储。（例如谷歌或Facebook每天为他们的用户收集万亿比特的数据）。这些类型的数据存储不需要固定的模式，无需多余操作就可以横向扩展。</p>
+<p>NoSQL实际上应该说是起源于linux上的dbm，是基于文件的存储操作，很适合对于大数据的操作管理。</p>
+<hr>
+<p>##关系型数据库遵循ACID规则</p>
+<p>事务在英文中是transaction，和现实世界中的交易很类似，它有如下四个特性：</p>
+<ul>
+<li>1、A (Atomicity) 原子性<br>原子性很容易理解，也就是说事务里的所有操作要么全部做完，要么都不做，事务成功的条件是事务里的所有操作都成功，只要有一个操作失败，整个事务就失败，需要回滚。</li>
+</ul>
+<p>比如银行转账，从A账户转100元至B账户，分为两个步骤：1）从A账户取100元；2）存入100元至B账户。这两步要么一起完成，要么一起不完成，如果只完成第一步，第二步失败，钱会莫名其妙少了100元。</p>
+<ul>
+<li>2、C (Consistency) 一致性<br>一致性也比较容易理解，也就是说数据库要一直处于一致的状态，事务的运行不会改变数据库原本的一致性约束。</li>
+</ul>
+<p>例如现有完整性约束a+b=10，如果一个事务改变了a，那么必须得改变b，使得事务结束后依然满足a+b=10，否则事务失败。</p>
+<ul>
+<li><p>3、I (Isolation) 独立性<br>所谓的独立性是指并发的事务之间不会互相影响，如果一个事务要访问的数据正在被另外一个事务修改，只要另外一个事务未提交，它所访问的数据就不受未提交事务的影响。<br>比如现有有个交易是从A账户转100元至B账户，在这个交易还未完成的情况下，如果此时B查询自己的账户，是看不到新增加的100元的。</p>
+</li>
+<li><p>4、D (Durability) 持久性<br>持久性是指一旦事务提交后，它所做的修改将会永久的保存在数据库上，即使出现宕机也不会丢失。</p>
+</li>
+</ul>
+<hr>
+<p>#RDBMS vs NoSQL</p>
+<p>###RDBMS</p>
+<ul>
+<li>高度组织化结构化数据</li>
+<li>结构化查询语言（SQL） (SQL)</li>
+<li>数据和关系都存储在单独的表中。</li>
+<li>数据操纵语言，数据定义语言</li>
+<li>严格的一致性</li>
+<li>基础事务</li>
+</ul>
+<p>###NoSQL</p>
+<ul>
+<li>代表着不仅仅是SQL</li>
+<li>没有声明性查询语言</li>
+<li>没有预定义的模式</li>
+<li>键 - 值对存储，列存储，文档存储，图形数据库</li>
+<li>最终一致性，而非ACID属性</li>
+<li>非结构化和不可预知的数据</li>
+<li>CAP定理</li>
+<li>高性能，高可用性和可伸缩性</li>
+</ul>
+<hr>
+<p>#NoSQL 简史</p>
+<p>NoSQL一词最早出现于1998年，是Carlo Strozzi开发的一个轻量、开源、不提供SQL功能的关系数据库。</p>
+<p>2009年，Last.fm的Johan Oskarsson发起了一次关于分布式开源数据库的讨论[2]，来自Rackspace的Eric Evans再次提出了NoSQL的概念，这时的NoSQL主要指非关系型、分布式、不提供ACID的数据库设计模式。</p>
+<p>2009年在亚特兰大举行的”no:sql(east)”讨论会是一个里程碑，其口号是”select fun, profit from real_world where relational=false;”。因此，对NoSQL最普遍的解释是”非关联型的”，强调Key-Value Stores和文档数据库的优点，而不是单纯的反对RDBMS。</p>
+<hr>
+<p>#NoSQL的优点/缺点</p>
+<p>优点:</p>
+<pre><code>- 高可扩展性
+- 分布式计算
+- 低成本
+- 架构的灵活性，半结构化数据
+- 没有复杂的关系 </code></pre><p>缺点:</p>
+<pre><code>- 没有标准化
+- 有限的查询功能（到目前为止）
+- 最终一致是不直观的程序</code></pre><hr>
+<p>#BASE</p>
+<p>BASE：Basically Available, Soft-state, Eventually Consistent。 由 Eric Brewer 定义。</p>
+<p>CAP理论的核心是：一个分布式系统不可能同时很好的满足一致性，可用性和分区容错性这三个需求，最多只能同时较好的满足两个。</p>
+<p>BASE是NoSQL数据库通常对可用性及一致性的弱要求原则:</p>
+<ul>
+<li>Basically Availble –基本可用</li>
+<li>Soft-state –软状态/柔性事务。 “Soft state” 可以理解为”无连接”的, 而 “Hard state” 是”面向连接”的</li>
+<li>Eventual Consistency –最终一致性 最终一致性， 也是是 ACID 的最终目的。</li>
+</ul>
+<hr>
+<p>参考文章：</p>
+<p>[mongodb教程][<a href="http://www.w3cschool.cc/mongodb/mongodb-tutorial.html]" target="_blank" rel="noopener">http://www.w3cschool.cc/mongodb/mongodb-tutorial.html]</a><br>[mongodb基本使用][<a href="http://www.cnblogs.com/TankMa/archive/2011/06/08/2074947.html]" target="_blank" rel="noopener">http://www.cnblogs.com/TankMa/archive/2011/06/08/2074947.html]</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://sheilacat.github.io/mongodb-intro/" data-id="ck5ccx67t001bfx051ax1edr7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/angular-and-mvvm/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          angular与MVVM框架
+        
+      </div>
+    </a>
+  
+  
+    <a href="/learn-linux/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Linux入门</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+	<h3 class="widget-title">PROFILE</h3>
+	<div class="widget">
+		<div class="profile">
+			<img class="profile" />
+		  	<p>SHEILACAT</p>
+		  	<span>You said you grow old with me.</span>
+		  	<p class="link">
+		  		<a class="me-github" target="_blank" href="https://github.com/sheilaCat"></a>
+			  	<a class="me-weibo" href="#"></a>
+			  	<a class="me-zhihu" target="_blank" href="https://www.zhihu.com/people/sheilaCat"></a>
+	  	        
+	  	        	<a class="me-rss" href="/atom.xml"></a>
+		        
+		  	</p>
+	  		<div class="tags">
+	  			<span>这个杀手不太冷</span>
+	  			<span>叔本华迷妹</span>
+	  			<span>前端攻城狮</span>
+	  			<span>可能是个萌妹子</span>
+	  		</div>
+		</div>
+	</div>
+</div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-read/">2019我读了40本书：其中这9本不可错过</a>
+          </li>
+        
+          <li>
+            <a href="/weixin-tiny-program/">微信小程序概念及实践</a>
+          </li>
+        
+          <li>
+            <a href="/node-straight-out/">node直出与同构javascript</a>
+          </li>
+        
+          <li>
+            <a href="/learn-es6/">ECMAScript6学习</a>
+          </li>
+        
+          <li>
+            <a href="/javascript-error-handle/">JavaScript错误处理</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Coffeescript/">Coffeescript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/">node</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/">前端技术</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%A7%84%E8%8C%83%E5%8C%96/">前端规范化</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9B%B8%E5%85%B3/">浏览器相关</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86/">网络知识</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    <div class="widget-wrap">
+	<h3 class="widget-title">FRIENDS</h3>
+	<div class="widget">
+		<a href="http://blog.chenzuhuang.com/" target="_blank" rel="noopener">祖神的博客</a>
+	</div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 SheilaCat<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

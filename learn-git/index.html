@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>git学习笔记 | Something here</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="版本控制（VCS）的类型 本地版本控制系统 集中化的版本控制系统(Centralized Version Control Systems） 分布式版本控制系统(Distributed Version Control System）分布式版本控制系统的客户端，每一次的提取操作，实际上都是一次对代码仓库的完整备份。这么一来，任何一处协同工作用的服务器发生故障，事后都可以用任何一个镜像出来的本地仓库恢复">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git学习笔记">
+<meta property="og:url" content="http://sheilacat.github.io/learn-git/index.html">
+<meta property="og:site_name" content="Something here">
+<meta property="og:description" content="版本控制（VCS）的类型 本地版本控制系统 集中化的版本控制系统(Centralized Version Control Systems） 分布式版本控制系统(Distributed Version Control System）分布式版本控制系统的客户端，每一次的提取操作，实际上都是一次对代码仓库的完整备份。这么一来，任何一处协同工作用的服务器发生故障，事后都可以用任何一个镜像出来的本地仓库恢复">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://7xoefy.com1.z0.glb.clouddn.com/FileStatusLifecycle.png">
+<meta property="og:image" content="http://7xoefy.com1.z0.glb.clouddn.com/git-api.png">
+<meta property="article:published_time" content="2015-11-17T14:19:57.000Z">
+<meta property="article:modified_time" content="2016-10-08T12:26:20.000Z">
+<meta property="article:author" content="SheilaCat">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://7xoefy.com1.z0.glb.clouddn.com/FileStatusLifecycle.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Something here" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-66121951-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=53341100" charset="UTF-8"></script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Something here</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">This world was never meant for one as beautiful as you.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://sheilacat.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-learn-git" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/learn-git/" class="article-date">
+  <time datetime="2015-11-17T14:19:57.000Z" itemprop="datePublished">2015-11-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      git学习笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="版本控制（VCS）的类型"><a href="#版本控制（VCS）的类型" class="headerlink" title="版本控制（VCS）的类型"></a>版本控制（VCS）的类型</h2><ul>
+<li>本地版本控制系统</li>
+<li>集中化的版本控制系统(Centralized Version Control Systems）</li>
+<li>分布式版本控制系统(Distributed Version Control System）<br>分布式版本控制系统的客户端，每一次的提取操作，实际上都是一次对代码仓库的完整备份。这么一来，任何一处协同工作用的服务器发生故障，事后都可以用任何一个镜像出来的本地仓库恢复。</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="Git基础"><a href="#Git基础" class="headerlink" title="Git基础"></a>Git基础</h2><ul>
+<li>直接记录快照，而非差异比较</li>
+<li>近乎所有操作都是本地执行</li>
+<li>时刻保持数据完整性<br>在保存到Git之前，所有数据都要进行内容的校验和（checksum）计算，并将此结果作为数据的唯一标识和索引。Git使用SHA-1算法计算数据的校验和，通过对文件的内容或目录的结构计算出一个SHA-1哈希值，作为指纹字符串。该字串由40个十六进制字符（0-9及a-f）组成。</li>
+<li>多数操作仅添加数据</li>
+<li>文件的三种状态<br>对于任何一个文件，在 Git 内都只有三种状态：<code>已提交（committed）</code>，<code>已修改（modified）</code>和<code>已暂存（staged）</code>。已提交表示该文件已经被安全地保存在本地数据库中了；已修改表示修改了某个文件，但还没有提交保存；已暂存表示把已修改的文件放在下次提交时要保存的清单中。<br>由此我们看到 Git 管理项目时，文件流转的三个工作区域：Git 的工作目录，暂存区域，以及本地仓库。</li>
+</ul>
+<h3 id="在工作目录中初始化新仓库"><a href="#在工作目录中初始化新仓库" class="headerlink" title="在工作目录中初始化新仓库"></a>在工作目录中初始化新仓库</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git init</span><br></pre></td></tr></table></figure>
+
+<h3 id="记录每次更新到仓库"><a href="#记录每次更新到仓库" class="headerlink" title="记录每次更新到仓库"></a>记录每次更新到仓库</h3><p><img src="http://7xoefy.com1.z0.glb.clouddn.com/FileStatusLifecycle.png" alt="img"></p>
+<h3 id="检查当前文件状态"><a href="#检查当前文件状态" class="headerlink" title="检查当前文件状态"></a>检查当前文件状态</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br></pre></td></tr></table></figure>
+
+<h3 id="暂存已修改文件"><a href="#暂存已修改文件" class="headerlink" title="暂存已修改文件"></a>暂存已修改文件</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git add</span><br></pre></td></tr></table></figure>
+<p><code>git add</code>命令（这是个多功能命令，根据目标文件的状态不同，此命令的效果也不同：可以用它开始跟踪新文件，或者把已跟踪的文件放到暂存区，还能用于合并时把有冲突的文件标记为已解决状态等）</p>
+<h3 id="忽略某些文件"><a href="#忽略某些文件" class="headerlink" title="忽略某些文件"></a>忽略某些文件</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cat .gitignore</span><br><span class="line">*.[oa]</span><br><span class="line">*~</span><br></pre></td></tr></table></figure>
+
+<p>文件 .gitignore 的格式规范如下：</p>
+<ul>
+<li>所有空行或者以注释符号 ＃ 开头的行都会被 Git 忽略。</li>
+<li>可以使用标准的 glob 模式匹配。</li>
+<li>匹配模式最后跟反斜杠（/）说明要忽略的是目录。</li>
+<li>要忽略指定模式以外的文件或目录，可以在模式前加上惊叹号（!）取反。</li>
+</ul>
+<p>所谓的 glob 模式是指 shell 所使用的简化了的正则表达式。星号（*）匹配零个或多个任意字符；[abc] 匹配任何一个列在方括号中的字符（这个例子要么匹配一个 a，要么匹配一个 b，要么匹配一个 c）；问号（?）只匹配一个任意字符；如果在方括号中使用短划线分隔两个字符，表示所有在这两个字符范围内的都可以匹配（比如 [0-9] 表示匹配所有 0 到 9 的数字）。</p>
+<h3 id="查看已暂存和未暂存的更新"><a href="#查看已暂存和未暂存的更新" class="headerlink" title="查看已暂存和未暂存的更新"></a>查看已暂存和未暂存的更新</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git diff</span><br></pre></td></tr></table></figure>
+<p><code>git diff</code>会使用文件补丁的格式显示具体添加和删除的行。<br>此命令比较的是工作目录中当前文件和暂存区域快照之间的差异，也就是修改之后<strong><em>还没有暂存起来的变化内容</em></strong>。<br>若要看已经暂存起来的文件和上次提交时的快照之间的差异，可以用<code>git diff --cached</code>命令。（Git 1.6.1及更高版本还允许使用<code>git diff --staged</code>，效果是相同的）</p>
+<h3 id="提交更新"><a href="#提交更新" class="headerlink" title="提交更新"></a>提交更新</h3><p><code>git commit</code>命令，之后会进入文本编辑环境要求输入本次提交的说明。<br><code>git commit -m &quot;xxx&quot;</code><br><code>git commit -a -m &quot;xxx&quot;</code> 跳过使用暂存区域，<code>-a</code>选项Git自动把所有已经跟踪过的文件暂存起来一并提交。</p>
+<h3 id="移除文件"><a href="#移除文件" class="headerlink" title="移除文件"></a>移除文件</h3><p>要从Git中移除某个文件，就必须要从已跟踪文件清单中移除（确切地说，是从暂存区域移除），然后提交。<code>git rm</code>，并连带从工作目录中删除指定的文件。</p>
+<p>另外一种情况是，我们想把文件从 Git 仓库中删除（亦即从暂存区域移除），但仍然希望保留在当前工作目录中。换句话说，仅是从跟踪清单中删除。比如一些大型日志文件或者一堆 .a 编译文件，不小心纳入仓库后，要移除跟踪但不删除文件，以便稍后在 .gitignore 文件中补上，用 –cached 选项即可：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git rm --cached readme.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="移动文件"><a href="#移动文件" class="headerlink" title="移动文件"></a>移动文件</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git mv file_from file_to</span><br></pre></td></tr></table></figure>
+<p>重命名文件，其实，运行<code>git mv</code>就相当于运行了下面三条命令</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ mv README.txt README</span><br><span class="line">$ git rm README.txt</span><br><span class="line">$ git add README</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看提交历史"><a href="#查看提交历史" class="headerlink" title="查看提交历史"></a>查看提交历史</h3><p><code>git log</code>命令</p>
+<p><code>git log -p -2</code>命令     <code>-p</code>选项展开显示每次提交的内容差异，用<code>-2</code>则仅显示最近的两次更新</p>
+<p><code>git log --stat</code>仅显示简要的增改行数统计</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">选项 说明</span><br><span class="line"></span><br><span class="line">    -p 按补丁格式显示每个更新之间的差异。</span><br><span class="line"></span><br><span class="line">    --stat 显示每次更新的文件修改统计信息。</span><br><span class="line"></span><br><span class="line">    --shortstat 只显示 --stat 中最后的行数修改添加移除统计。</span><br><span class="line"></span><br><span class="line">    --name-only 仅在提交信息后显示已修改的文件清单。</span><br><span class="line"></span><br><span class="line">    --name-status 显示新增、修改、删除的文件清单。</span><br><span class="line"></span><br><span class="line">    --abbrev-commit 仅显示 SHA<span class="number">-1</span> 的前几个字符，而非所有的 <span class="number">40</span> 个字符。</span><br><span class="line"></span><br><span class="line">    --relative-date 使用较短的相对时间显示（比如，“<span class="number">2</span> weeks ago”）。</span><br><span class="line"></span><br><span class="line">    --graph 显示 ASCII 图形表示的分支合并历史。</span><br><span class="line"></span><br><span class="line">    --pretty 使用其他格式显示历史提交信息。可用的选项包括 oneline，short，full，fuller 和 format（后跟指定格式）。</span><br></pre></td></tr></table></figure>
+
+<p>更有意思的是<code>format</code>，可以定制要显示的记录格式，这样的输出便于后期编程提取分析：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$ git log --pretty=format:<span class="string">"%h - %an, %ar : %s"</span></span><br><span class="line"></span><br><span class="line">    ca82a6d - Scott Chacon, <span class="number">11</span> months ago : changed the version number</span><br><span class="line"></span><br><span class="line">    <span class="number">085</span>bb3b - Scott Chacon, <span class="number">11</span> months ago : removed unnecessary test code</span><br><span class="line"></span><br><span class="line">    a11bef0 - Scott Chacon, <span class="number">11</span> months ago : first commit</span><br></pre></td></tr></table></figure>
+
+<p>列出了常用的格式占位符写法及其代表的意义。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">选项 说明</span><br><span class="line"></span><br><span class="line">    %H 提交对象（commit）的完整哈希字串</span><br><span class="line"></span><br><span class="line">    %h 提交对象的简短哈希字串</span><br><span class="line"></span><br><span class="line">    %T 树对象（tree）的完整哈希字串</span><br><span class="line"></span><br><span class="line">    %t 树对象的简短哈希字串</span><br><span class="line"></span><br><span class="line">    %P 父对象（parent）的完整哈希字串</span><br><span class="line"></span><br><span class="line">    %p 父对象的简短哈希字串</span><br><span class="line"></span><br><span class="line">    %an 作者（author）的名字</span><br><span class="line"></span><br><span class="line">    %ae 作者的电子邮件地址</span><br><span class="line"></span><br><span class="line">    %ad 作者修订日期（可以用 -date= 选项定制格式）</span><br><span class="line"></span><br><span class="line">    %ar 作者修订日期，按多久以前的方式显示</span><br><span class="line"></span><br><span class="line">    %cn 提交者(committer)的名字</span><br><span class="line"></span><br><span class="line">    %ce 提交者的电子邮件地址</span><br><span class="line"></span><br><span class="line">    %cd 提交日期</span><br><span class="line"></span><br><span class="line">    %cr 提交日期，按多久以前的方式显示</span><br><span class="line"></span><br><span class="line">    %s 提交说明</span><br></pre></td></tr></table></figure>
+
+<p>还有时间限制，比如<code>--since</code>和<code>--until</code>，<code>git log --since=2.weeks</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">选项 说明</span><br><span class="line"></span><br><span class="line">    -(n) 仅显示最近的 n 条提交</span><br><span class="line"></span><br><span class="line">    --since, --after 仅显示指定时间之后的提交。</span><br><span class="line"></span><br><span class="line">    --until, --before 仅显示指定时间之前的提交。</span><br><span class="line"></span><br><span class="line">    --author 仅显示指定作者相关的提交。</span><br><span class="line"></span><br><span class="line">    --committer 仅显示指定提交者相关的提交。</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用图形化工具查阅提交历史"><a href="#使用图形化工具查阅提交历史" class="headerlink" title="使用图形化工具查阅提交历史"></a>使用图形化工具查阅提交历史</h3><p>随Git一同发布的gitk，基本上相当于<code>git log</code>命令的可视化版本。</p>
+<h3 id="撤销操作"><a href="#撤销操作" class="headerlink" title="撤销操作"></a>撤销操作</h3><h4 id="修改最后一次提交"><a href="#修改最后一次提交" class="headerlink" title="修改最后一次提交"></a>修改最后一次提交</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git commit --amend</span><br></pre></td></tr></table></figure>
+
+<h4 id="取消已经暂存的文件"><a href="#取消已经暂存的文件" class="headerlink" title="取消已经暂存的文件"></a>取消已经暂存的文件</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git reset HEAD filename</span><br></pre></td></tr></table></figure>
+
+<h4 id="取消对文件的修改"><a href="#取消对文件的修改" class="headerlink" title="取消对文件的修改"></a>取消对文件的修改</h4><p>取消对工作目录文件的修改</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -- filename</span><br></pre></td></tr></table></figure>
+
+<h3 id="远程仓库的使用"><a href="#远程仓库的使用" class="headerlink" title="远程仓库的使用"></a>远程仓库的使用</h3><h4 id="查看当前的远程库"><a href="#查看当前的远程库" class="headerlink" title="查看当前的远程库"></a>查看当前的远程库</h4><p><code>git remote</code><br><code>git remote -v</code>显示对应的克隆地址</p>
+<h4 id="添加远程仓库"><a href="#添加远程仓库" class="headerlink" title="添加远程仓库"></a>添加远程仓库</h4><p><code>git remote add [shortname] [url]</code></p>
+<h4 id="查看远程仓库信息"><a href="#查看远程仓库信息" class="headerlink" title="查看远程仓库信息"></a>查看远程仓库信息</h4><p><code>git remote show [remote-name]</code></p>
+<h4 id="远程仓库的删除和重命名"><a href="#远程仓库的删除和重命名" class="headerlink" title="远程仓库的删除和重命名"></a>远程仓库的删除和重命名</h4><p><code>git remote rename</code>命令修改某个远程仓库在本地的简称<br><code>git remote rm branchname</code>移除对应的远端仓库</p>
+<p>参考<a href="http://git.oschina.net/progit/" target="_blank" rel="noopener">http://git.oschina.net/progit/</a></p>
+<p>最后附上一张GIT API总结图，图片来自网络</p>
+<p><img src="http://7xoefy.com1.z0.glb.clouddn.com/git-api.png" alt="img"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://sheilacat.github.io/learn-git/" data-id="ck5ccx67h000tfx05cpd33laz" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/maintainable-javascript/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          《编写可维护的JavaScript》
+        
+      </div>
+    </a>
+  
+  
+    <a href="/http-guide/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">《HTTP权威指南》读书笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+	<h3 class="widget-title">PROFILE</h3>
+	<div class="widget">
+		<div class="profile">
+			<img class="profile" />
+		  	<p>SHEILACAT</p>
+		  	<span>You said you grow old with me.</span>
+		  	<p class="link">
+		  		<a class="me-github" target="_blank" href="https://github.com/sheilaCat"></a>
+			  	<a class="me-weibo" href="#"></a>
+			  	<a class="me-zhihu" target="_blank" href="https://www.zhihu.com/people/sheilaCat"></a>
+	  	        
+	  	        	<a class="me-rss" href="/atom.xml"></a>
+		        
+		  	</p>
+	  		<div class="tags">
+	  			<span>这个杀手不太冷</span>
+	  			<span>叔本华迷妹</span>
+	  			<span>前端攻城狮</span>
+	  			<span>可能是个萌妹子</span>
+	  		</div>
+		</div>
+	</div>
+</div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-read/">2019我读了40本书：其中这9本不可错过</a>
+          </li>
+        
+          <li>
+            <a href="/weixin-tiny-program/">微信小程序概念及实践</a>
+          </li>
+        
+          <li>
+            <a href="/node-straight-out/">node直出与同构javascript</a>
+          </li>
+        
+          <li>
+            <a href="/learn-es6/">ECMAScript6学习</a>
+          </li>
+        
+          <li>
+            <a href="/javascript-error-handle/">JavaScript错误处理</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Coffeescript/">Coffeescript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/">node</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/">前端技术</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%A7%84%E8%8C%83%E5%8C%96/">前端规范化</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9B%B8%E5%85%B3/">浏览器相关</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86/">网络知识</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    <div class="widget-wrap">
+	<h3 class="widget-title">FRIENDS</h3>
+	<div class="widget">
+		<a href="http://blog.chenzuhuang.com/" target="_blank" rel="noopener">祖神的博客</a>
+	</div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 SheilaCat<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

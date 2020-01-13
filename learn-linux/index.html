@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Linux入门 | Something here</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="UNIX哲学UNIX操作系统（包括Linux）鼓励一种特定的编程风格。下面列出了一些典型的UNIX程序和系统所具有的特点。  简单性 KISS keep it small and simple 集中性 可重用组件 过滤器 开放的文件格式 灵活性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux入门">
+<meta property="og:url" content="http://sheilacat.github.io/learn-linux/index.html">
+<meta property="og:site_name" content="Something here">
+<meta property="og:description" content="UNIX哲学UNIX操作系统（包括Linux）鼓励一种特定的编程风格。下面列出了一些典型的UNIX程序和系统所具有的特点。  简单性 KISS keep it small and simple 集中性 可重用组件 过滤器 开放的文件格式 灵活性">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-05-15T12:30:22.000Z">
+<meta property="article:modified_time" content="2016-09-18T07:05:06.000Z">
+<meta property="article:author" content="SheilaCat">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Something here" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-66121951-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=53341100" charset="UTF-8"></script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Something here</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">This world was never meant for one as beautiful as you.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://sheilacat.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-learn-linux" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/learn-linux/" class="article-date">
+  <time datetime="2015-05-15T12:30:22.000Z" itemprop="datePublished">2015-05-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Linux入门
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="UNIX哲学"><a href="#UNIX哲学" class="headerlink" title="UNIX哲学"></a>UNIX哲学</h2><p>UNIX操作系统（包括Linux）鼓励一种特定的编程风格。下面列出了一些典型的UNIX程序和系统所具有的特点。</p>
+<ul>
+<li>简单性 KISS keep it small and simple</li>
+<li>集中性</li>
+<li>可重用组件</li>
+<li>过滤器</li>
+<li>开放的文件格式</li>
+<li>灵活性</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="为什么使用shell编程"><a href="#为什么使用shell编程" class="headerlink" title="为什么使用shell编程"></a>为什么使用shell编程</h2><ul>
+<li>使用shell进行程序设计的原因之一是，你可以快速、简单地完成编程。</li>
+<li>shell非常适合于编写一些执行相对简单的任务的小工具，因为它们更强调的是易于配置、易于维护和可移植性，而不是很看重执行的效率。</li>
+<li>可以使用shell对进程控制进行组织，使命令按照预定顺序在前一阶段命令成功完成的前提下顺序执行。</li>
+<li>shell执行shell程序，这些程序通常被称为脚本，它们是在运行时解释执行的。这使得调试工作比较容易进行，因为你可以逐行地执行指令，而且节省了重新编译的时间。然而，这也使得shell不适合用来完成时间紧迫型和处理器忙碌型的任务。</li>
+</ul>
+<h2 id="什么是shell"><a href="#什么是shell" class="headerlink" title="什么是shell"></a>什么是shell</h2><p>shell是一个作为用户与Linux系统间接口的程序，它允许用户向操作系统输入需要执行的命令。</p>
+<p>shell（实际上是两种shell:bash和csh）和其他程序环绕在Linux内核的四周。</p>
+<h2 id="常用的shell"><a href="#常用的shell" class="headerlink" title="常用的shell"></a>常用的shell</h2><ul>
+<li>sh(Bourne)        源于UNIX早期版本的最初的shell</li>
+<li>csh、tcsh、zsh     C shell及其变体，最初是由Bill Joy在Berkeley UNIX上创建的。它可能是继bash和Korn shell之后第三个最流行的shell</li>
+<li>ksh、pdksh        korn shell和它的公共域pdksh(public domain korn shell)由David Korn编写，它是许多商业版本UNIX的默认shell</li>
+<li>bash            来自GNU项目的bash或Bourne Again Shell是Linux的主要shell。它的优点是可以免费获取其源代码，即使你的UNIX系统目前没有运行它，它也可能已经被移植到该系统中。bash与Korn shell有许多相似之处</li>
+</ul>
+<p>除了C shell和少数变体以外，所有这些shell都很相似，并且都与X/Open 4.2和POSIX 1003.2规范中对于shell的规定非常一致。X/Open通常是一个提出更多要求的规范，但遵循它的系统也更加友好。</p>
+<p>//顺手记录出现的一些命令</p>
+<h2 id="重定向输出"><a href="#重定向输出" class="headerlink" title="重定向输出"></a>重定向输出</h2><pre><code>$ ls -l &gt; lsoutput.txt</code></pre><p>这条命令把ls命令的输出保存到文件中</p>
+<p>重定向：</p>
+<ul>
+<li><p>文件描述符0代表一个程序的标准输入</p>
+</li>
+<li><p>文件描述符1代表标准输出</p>
+</li>
+<li><p>文件描述符2代表标准错误输出</p>
+<p>  set -o noclobber</p>
+</li>
+</ul>
+<p>(或set -C)命令设置noclobber选项，阻止重定向操作对一个已有文件的覆盖。</p>
+<pre><code>set +o noclobber</code></pre><p>取消该选项</p>
+<pre><code>$ ps &gt;&gt; lsoutput.txt</code></pre><p>这条命令会将ps命令的输出附加到指定文件的尾部。</p>
+<p>如果你想把两组输出都重定向到一个文件中，你可以用&gt;&amp;操作符来结合两个输出。</p>
+<pre><code>$ kill -1 1234 &gt;killouterr.txt 2&gt;&amp;1</code></pre><h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><p>在Linux下通过管道连接的进程可以同时运行，并且随着数据流在它们之间的传递可以自动地进行协调。</p>
+<p><strong><em>注意</em></strong></p>
+<p>如果你有一系列的命令需要执行，相应的输出文件是在这一组命令被创建的同时立刻被创建或写入的，所以决不要在命令流中重复使用相同的文件名。如果你尝试执行如下命令：</p>
+<pre><code>cat mydata.txt | sort | uniq &gt; mydata.txt</code></pre><p>你最终将得到一个空文件，因为你在读取文件mydata.txt之前就已经覆盖了这个文件的内容。</p>
+<h2 id="shell脚本"><a href="#shell脚本" class="headerlink" title="shell脚本"></a>shell脚本</h2><h3 id="exit命令"><a href="#exit命令" class="headerlink" title="exit命令"></a>exit命令</h3><p>exit命令的作用是确保脚本程序能够返回一个有意义的退出码。当程序以交互方式运行时，我们很少需要检查它的退出码，但如果你打算从另一个脚本程序里调用这个脚本程序并查看它是否执行成功，那么返回一个适当的退出码就很重要了。请相信自己的脚本程序是有用的，它总有一天会作为其他脚本程序的一部分而被重用。</p>
+<h3 id="shell的语法"><a href="#shell的语法" class="headerlink" title="shell的语法"></a>shell的语法</h3><ul>
+<li><p>变量：字符串、数字、环境和参数</p>
+<ul>
+<li>Linux是一个区分大小写的系统。</li>
+<li>在shell中，你可以通过在变量名前加一个$符号来访问他的内容。无论何时你想要获取变量内容，你都必须在它前面加一个$符号。当你为变量赋值时，你只需要使用变量名，该变量会根据需要被自动创建。</li>
+<li>如果字符串里包含空格，就必须用引号把它们括起来。此外，等号两边不不能有空格。e.g. salutation=7+5</li>
+<li>可以使用<code>read</code>命令将用户的输入赋值给一个变量。</li>
+<li>使用引号：双引号会把变量替换为它的值，单引号不会。</li>
+<li>test或[命令 <strong><em>注意，你必须在[符号和被检查的条件之间留出空格。</em></strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h4><ul>
+<li>$HOME    当前用户的家目录</li>
+<li>$PATH    以冒号分隔的用来搜索命令的目录列表</li>
+<li>$PS1    一级命令提示符，通常是$字符</li>
+<li>$PS2    二级命令提示符，用来提示后续的输入，通常是&gt;字符</li>
+<li>$IFS    输入域分隔符</li>
+<li>$0    shell脚本的名字</li>
+<li>$#    传递给脚本的参数个数</li>
+<li>$$    shell脚本的进程号，脚本通常会用它来生成一个唯一的临时文件</li>
+</ul>
+<ul>
+<li><p>条件：shell中的布尔值</p>
+</li>
+<li><p>程序控制：if、elif、for、while、until、case</p>
+<ul>
+<li><p>一般来说，如果需要循环至少执行一次，那么就使用while循环；如果可能根本都不需要执行循环，就使用until循环。</p>
+</li>
+<li><p>case结构</p>
+<p>case “$timeofday” in<br>  yes)    echo “Good Morning”;;<br>  no )    echo “Good Afternoon”;;<br>  y  )    echo “Good Morning”;;<br>  n  )    echo “Good Afternoon”;;</p>
+<ul>
+<li>)    echo “Sorry,answer not recognized”;;<br>esac</li>
+</ul>
+</li>
+<li><p>and列表和or列表<br>AND列表：只有在前面所有命令都执行成功的情况下才执行后一条命令。<br>OR列表：允许我们持续执行一系列命令直到有一条命令成功为止，其后的命令将不再被执行。</p>
+</li>
+</ul>
+</li>
+<li><p>命令列表</p>
+</li>
+</ul>
+<p><strong>命令</strong>  你可以在shell脚本程序内部执行两类命令。一类是可以在命令提示符中执行的“普通”命令，也称为外部命令（external command），一类是我们前面提到的“内置”命令，也称为内部命令(internal command)。内置命令是在shell内部实现的，它们不能作为外部程序被调用。然而，大多数的内部命令也提供了独立运行的程序版本——这一需求是POSIX规范的一部分。通常情况下，命令是内部的还是外部的并不重要，只是内部命令的执行效率更高。</p>
+<ul>
+<li>:命令<br>冒号(:)命令是一个空命令。它偶尔会被用于简化条件逻辑，相对于true的一个别名。由于它是内置命令，所以它运行得比true快，但它的输出可读性较差。<br>:结构也会被用在变量的条件设置中</li>
+<li>exit n（退出码）<pre><code>* 126        文件不可执行
+* 127        命令未找到
+* 128 及以上    出现一个信号</code></pre></li>
+<li>export命令</li>
+</ul>
+<p>export没命令将作为它参数的变量导出到子shell中，并使之在子shell中有效。在默认情况下，在一个shell中被创建的变量在这个shell调用的下级（子）shell中是不可用的。export命令把自己的参数创建为一个环境变量，而这个环境变量可以被当前程序调用的其他脚本和程序看见。从更技术的角度来说，被导出的变量构成从该shell衍生的任何子进程的环境变量。</p>
+<ul>
+<li><p>expr命令</p>
+<p>  expr命令将它的参数当作一个表达式来求值。在较新的脚本程序中，expr命令通常被替换为更有效的$((…))语法。</p>
+</li>
+<li><p>printf命令</p>
+<p>  printf “format string” parameter1 parameter2 …</p>
+</li>
+</ul>
+<p>格式字符串与C/C++中使用的非常相似，但有一些自己的限制。主要是不支持浮点数，因为shell中的有的算术运算都是按照整数来进行计算的。格式字符串由各种可打印字符、转义序列和字符转换限定符组成。格式字符串中除了%和\之外的所有字符都将按原样输出。</p>
+<ul>
+<li>set命令</li>
+</ul>
+<p>set命令的作用是为shell甚至参数变量。许多命令的输出结果是以空格分隔的值，如果需要使用输出结果中的某个域，这个命令就非常有用。</p>
+<ul>
+<li>shift命令</li>
+</ul>
+<p>shift命令把所有参数变量左移一个位置，使$2变成$1，$2变成$2，以此类推。原来$1的值将被丢弃，而$0仍将保持不变。$*、$@和$#等其他变量也将根据参数变量的新安排做相应的变动。</p>
+<ul>
+<li>trap命令</li>
+</ul>
+<p>trap命令有两个参数，第一个参数是接收到指定信号时将要采取的行动，第二个参数是要处理的信号名。</p>
+<pre><code>trap command signal</code></pre><p>如果要重置某个信号的处理方式到其默认值，只需将<code>command</code>设置为<code>-</code>。如果要忽略某个信号，就要把<code>command</code>设置为空字符串``。一个不带参数的<code>trap</code>命令将列出当前设置的信号及其行动的清单。</p>
+<p>下面列出一些X/Open规范里面规定的能够被捕获的比较重要的一些信号（括号里面的数字是对应的信号编号）。更多参考man 7 signal</p>
+<pre><code>* HUP(1)    挂起，通常因终端掉线或用户退出而引发
+* INT(2)    中断，通常因按下Ctrl+C组合键而引发
+* QUIT(3)    退出，通常因按下Ctrl+\组合键而引发
+* ABRT(6)    中止，通常因某些严重的执行错误而引发
+* ALRM(14)    报警，通常用来处理超时
+* TERM(15)    终止，通常在系统关机时发送</code></pre><ul>
+<li>unset命令 unset命令的作用是从环境中删除变量或函数。这个命令不能删除shell本身定义的只读变量（如IFS）。这个命令并不常用。</li>
+</ul>
+<p>这里列举一些命令</p>
+<ul>
+<li>break命令</li>
+<li>:命令</li>
+<li>continue命令</li>
+<li>.命令</li>
+</ul>
+<p>#</p>
+<ul>
+<li><p>echo命令</p>
+</li>
+<li><p>eval命令</p>
+</li>
+<li><p>exec命令</p>
+</li>
+<li><p>exit n命令</p>
+</li>
+<li><p>export命令</p>
+</li>
+<li><p>expr命令</p>
+</li>
+<li><p>printf命令</p>
+</li>
+<li><p>return命令</p>
+</li>
+<li><p>set命令</p>
+</li>
+<li><p>shift命令</p>
+</li>
+<li><p>trap命令</p>
+</li>
+<li><p>unset命令</p>
+</li>
+<li><p>另外两个有用的命令和正则表达式</p>
+<ul>
+<li><p>find</p>
+<p>find <code>[path]</code> <code>[options]</code> <code>[tests]</code> <code>[actions]</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>grep命令</li>
+</ul>
+<p>通用正则表达式解析器（General Regular Expression Parser，简写为grep）</p>
+<ul>
+<li><p>函数</p>
+<ul>
+<li><p>if elif的另一种写法：用命令列表OR或AND来实现</p>
+<p>[ -f file_one ] &amp;&amp; command for true || command for false</p>
+</li>
+</ul>
+</li>
+<li><p>shell内置命令</p>
+</li>
+<li><p>获取命令的执行结果</p>
+</li>
+<li><p>here文档</p>
+</li>
+</ul>
+<p>在shell脚本程序中向一条命令传递输入的一种特殊方法是使用here文档。它允许一条命令在获得输入数据时就好像在读取一个文件或键盘一样，而实际上是从脚本程序中得到输入数据。</p>
+<ul>
+<li>调试脚本程序</li>
+</ul>
+<p>因为脚本程序是解释执行的，所以在脚本程序的修改和重试过程中没有编译方面的额外开支。跟踪脚本程序中复杂错误的主要方法是设置各种shell选项。</p>
+<ul>
+<li>dialog和gdialog命令</li>
+</ul>
+<h1 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h1><ul>
+<li>文件和设备</li>
+<li>系统调用</li>
+<li>库函数</li>
+<li>底层文件访问</li>
+<li>管理文件</li>
+<li>标准I/O库</li>
+<li>格式化输入和输出</li>
+<li>文件和目录的维护</li>
+<li>扫描目录</li>
+<li>错误及其处理</li>
+<li>/proc文件系统</li>
+<li>高级主题：fcntl和mmap</li>
+</ul>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>系统使用的是文件的inode编号，目录结构为文件命名仅仅是为了便于人们使用。</p>
+<p>UNIX和Linux中比较重要的设备文件有3个：<code>/dev/console</code>、<code>/dev/tty</code>和<code>/dev/null</code>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://sheilacat.github.io/learn-linux/" data-id="ck5ccx67k000xfx05acfr7m5p" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/mongodb-intro/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          mongodb
+        
+      </div>
+    </a>
+  
+  
+    <a href="/learn-modular-specification/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">模块化规范学习</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+	<h3 class="widget-title">PROFILE</h3>
+	<div class="widget">
+		<div class="profile">
+			<img class="profile" />
+		  	<p>SHEILACAT</p>
+		  	<span>You said you grow old with me.</span>
+		  	<p class="link">
+		  		<a class="me-github" target="_blank" href="https://github.com/sheilaCat"></a>
+			  	<a class="me-weibo" href="#"></a>
+			  	<a class="me-zhihu" target="_blank" href="https://www.zhihu.com/people/sheilaCat"></a>
+	  	        
+	  	        	<a class="me-rss" href="/atom.xml"></a>
+		        
+		  	</p>
+	  		<div class="tags">
+	  			<span>这个杀手不太冷</span>
+	  			<span>叔本华迷妹</span>
+	  			<span>前端攻城狮</span>
+	  			<span>可能是个萌妹子</span>
+	  		</div>
+		</div>
+	</div>
+</div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-read/">2019我读了40本书：其中这9本不可错过</a>
+          </li>
+        
+          <li>
+            <a href="/weixin-tiny-program/">微信小程序概念及实践</a>
+          </li>
+        
+          <li>
+            <a href="/node-straight-out/">node直出与同构javascript</a>
+          </li>
+        
+          <li>
+            <a href="/learn-es6/">ECMAScript6学习</a>
+          </li>
+        
+          <li>
+            <a href="/javascript-error-handle/">JavaScript错误处理</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Coffeescript/">Coffeescript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/">node</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/">前端技术</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%A7%84%E8%8C%83%E5%8C%96/">前端规范化</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9B%B8%E5%85%B3/">浏览器相关</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86/">网络知识</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    <div class="widget-wrap">
+	<h3 class="widget-title">FRIENDS</h3>
+	<div class="widget">
+		<a href="http://blog.chenzuhuang.com/" target="_blank" rel="noopener">祖神的博客</a>
+	</div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 SheilaCat<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

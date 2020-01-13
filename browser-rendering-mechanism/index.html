@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>浏览器渲染机制 | Something here</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="简要介绍了浏览器渲染的原理，以及CSS和JavaScript的加载。简要介绍了重绘和重排，以及减少重绘重排的一些方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器渲染机制">
+<meta property="og:url" content="http://sheilacat.github.io/browser-rendering-mechanism/index.html">
+<meta property="og:site_name" content="Something here">
+<meta property="og:description" content="简要介绍了浏览器渲染的原理，以及CSS和JavaScript的加载。简要介绍了重绘和重排，以及减少重绘重排的一些方法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://thumbsnap.com/s/jbVYmtcJ.jpg?0331">
+<meta property="og:image" content="http://thumbsnap.com/i/iiFti0rb.png?0331">
+<meta property="article:published_time" content="2016-04-01T03:01:00.000Z">
+<meta property="article:modified_time" content="2016-09-18T07:04:56.000Z">
+<meta property="article:author" content="SheilaCat">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://thumbsnap.com/s/jbVYmtcJ.jpg?0331">
+  
+    <link rel="alternate" href="/atom.xml" title="Something here" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-66121951-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=53341100" charset="UTF-8"></script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Something here</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">This world was never meant for one as beautiful as you.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://sheilacat.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-browser-rendering-mechanism" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/browser-rendering-mechanism/" class="article-date">
+  <time datetime="2016-04-01T03:01:00.000Z" itemprop="datePublished">2016-04-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9B%B8%E5%85%B3/">浏览器相关</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      浏览器渲染机制
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>简要介绍了浏览器渲染的原理，以及CSS和JavaScript的加载。简要介绍了重绘和重排，以及减少重绘重排的一些方法。</p>
+<a id="more"></a>
+
+<h2 id="浏览器显示页面的原理"><a href="#浏览器显示页面的原理" class="headerlink" title="浏览器显示页面的原理"></a>浏览器显示页面的原理</h2><ul>
+<li>获取HTML 文档及样式表文件</li>
+<li>解析成对应的树形数据结构<ul>
+<li>DOM tree</li>
+<li>CSSOM tree</li>
+</ul>
+</li>
+<li>计算可见节点形成render tree</li>
+<li>计算DOM 的形状及位置进行布局</li>
+<li>将每个节点转化为实际像素绘制到视口上（栅格化）</li>
+</ul>
+<p><code>render tree</code>（页面上所显示的最终结果）是由<code>DOM tree</code>（开发工具中所显示的HTML 所定义的内容结构）与<code>CSSOM tree</code>（样式表所定义的规则结构）合并并剔除不可见的节点所形成的，其中不包含如下节点:</p>
+<ul>
+<li>本身不可见的<ul>
+<li><code>&lt;html&gt;</code></li>
+<li><code>&lt;head&gt;</code></li>
+<li><code>&lt;meta&gt;</code></li>
+<li><code>&lt;link&gt;</code></li>
+<li><code>&lt;style&gt;</code></li>
+<li><code>&lt;script&gt;</code></li>
+</ul>
+</li>
+<li>设置了<code>display: none;</code>样式的</li>
+</ul>
+<p>浏览器工作大致流程：</p>
+<p><img src="http://thumbsnap.com/s/jbVYmtcJ.jpg?0331" alt="浏览器工作"></p>
+<h2 id="浏览器加载和渲染HTML的顺序"><a href="#浏览器加载和渲染HTML的顺序" class="headerlink" title="浏览器加载和渲染HTML的顺序"></a>浏览器加载和渲染HTML的顺序</h2><ol>
+<li><p>IE下载的顺序是从上到下，渲染的顺序也是从上到下，下载和渲染是同时进行的。</p>
+</li>
+<li><p>在渲染到页面的某一部分时，其上面的所有部分都已经下载完成（并不是说所有相关联的元素都已经下载完）</p>
+</li>
+<li><p>如果遇到语义解释性的标签嵌入文件（JS脚本，CSS样式），那么此时IE的下载过程会启用单独连接进行下载。</p>
+</li>
+<li><p>并且在下载后进行解析，解析过程中，停止页面所有往下元素的下载。阻塞加载</p>
+</li>
+<li><p>样式表在下载完成后，将和以前下载的所有样式表一起进行解析，解析完成后，将对此前所有元素（含以前已经渲染的）重新进行渲染。</p>
+</li>
+<li><p>JS、CSS中如有重定义，后定义函数将覆盖前定义函数</p>
+</li>
+</ol>
+<h2 id="JavaScript的加载"><a href="#JavaScript的加载" class="headerlink" title="JavaScript的加载"></a>JavaScript的加载</h2><ol>
+<li>不能并行下载和解析（阻塞下载）</li>
+<li>当引用了JS的时候，浏览器发送1个js request就会一直等待该request的返回。因为浏览器需要1个稳定的DOM树结构，而JS中很有可能有代码直接改变了DOM树结构，比如使用 document.write 或 appendChild,甚至是直接使用的location.href进行跳转，浏览器为了防止出现JS修改DOM树，需要重新构建DOM树的情况，所以 就会阻塞其他的下载和呈现.</li>
+</ol>
+<h2 id="解析CSS"><a href="#解析CSS" class="headerlink" title="解析CSS"></a>解析CSS</h2><p><img src="http://thumbsnap.com/i/iiFti0rb.png?0331" alt="解析CSS"></p>
+<h2 id="Reflow-amp-Repaint"><a href="#Reflow-amp-Repaint" class="headerlink" title="Reflow &amp; Repaint"></a>Reflow &amp; Repaint</h2><p><code>Reflow</code>的成本比<code>Repaint</code>的成本高得多。DOM Tree里的每个结点都会有<code>reflow</code>方法，一个结点的<code>reflow</code>很有可能导致子结点、甚至父结点以及同级结点的<code>reflow</code>。</p>
+<p>所以，下面这些动作有很大可能会是成本比较高的：</p>
+<ul>
+<li>当你增加、删除、修改DOM结点时，会导致Reflow或Repaint</li>
+<li>当你移动DOM的位置，或是搞个动画的时候。</li>
+<li>当你修改CSS样式的时候。</li>
+<li>当你Resize窗口的时候（移动端没有这个问题），或是滚动的时候。</li>
+<li>当你修改网页的默认字体时。</li>
+</ul>
+<p>基本上来说，reflow有如下的几个原因：</p>
+<ul>
+<li>Initial。网页初始化的时候。</li>
+<li>Incremental。一些Javascript在操作DOM Tree时。</li>
+<li>Resize。其些元件的尺寸变了。</li>
+<li>StyleChange。如果CSS的属性发生变化了。</li>
+<li>Dirty。几个Incremental的reflow发生在同一个frame的子树上。</li>
+</ul>
+<p>当然，我们的浏览器是聪明的，它不会你每改一次样式，它就reflow或repaint一次。一般来说，浏览器会把这样的操作积攒一批，然后做一次reflow，这又叫异步reflow或增量异步reflow。但是有些情况浏览器是不会这么做的，比如：resize窗口，改变了页面默认的字体，等。对于这些操作，浏览器会马上进行reflow。</p>
+<p>但是有些时候，我们的脚本会阻止浏览器这么干，比如：如果我们请求下面的一些DOM值：</p>
+<ul>
+<li>offsetTop, offsetLeft, offsetWidth, offsetHeight</li>
+<li>scrollTop/Left/Width/Height</li>
+<li>clientTop/Left/Width/Height</li>
+<li>IE中的 getComputedStyle(), 或 currentStyle</li>
+</ul>
+<p>因为，如果我们的程序需要这些值，那么浏览器需要返回最新的值，而这样一样会flush出去一些样式的改变，从而造成频繁的reflow/repaint。</p>
+<h2 id="减少reflow-repaint"><a href="#减少reflow-repaint" class="headerlink" title="减少reflow/repaint"></a>减少reflow/repaint</h2><p>下面是一些Best Practices：</p>
+<p>1）不要一条一条地修改DOM的样式。与其这样，还不如预先定义好css的class，然后修改DOM的className。</p>
+<p>2）把DOM离线后修改。如：</p>
+<ul>
+<li>使用documentFragment 对象在内存里操作DOM</li>
+<li>先把DOM给display:none(有一次reflow)，然后你想怎么改就怎么改。比如修改100次，然后再把他显示出来。<br>clone一个DOM结点到内存里，然后想怎么改就怎么改，改完后，和在线的那个的交换一下。</li>
+</ul>
+<p>3）不要把DOM结点的属性值放在一个循环里当成循环里的变量。不然这会导致大量地读写这个结点的属性。</p>
+<p>4）尽可能的修改层级比较低的DOM。当然，改变层级比较底的DOM有可能会造成大面积的reflow，但是也可能影响范围很小。</p>
+<p>5）为动画的HTML元件使用fixed或absoult的position，那么修改他们的CSS是不会reflow的。</p>
+<p>6）千万不要使用table布局。因为可能很小的一个小改动会造成整个table的重新布局。</p>
+<p>参考:<br><a href="http://coolshell.cn/articles/9666.html" target="_blank" rel="noopener">浏览器的渲染原理简介</a></p>
+<p>拓展阅读：<br><a href="https://developers.google.com/speed/docs/insights/rules?csw=1#header" target="_blank" rel="noopener">PageSpeed Insights规则</a></p>
+<p><a href="https://developer.yahoo.com/performance/rules.html" target="_blank" rel="noopener">Best Practices for Speeding Up Your Web Site</a></p>
+<p>推荐阅读：</p>
+<p><a href="http://taligarsiel.com/Projects/howbrowserswork1.htm" target="_blank" rel="noopener">How browsers work</a></p>
+<p>中文翻译：<a href="http://my.oschina.net/anna153/blog/377259#OSC_h2_18" target="_blank" rel="noopener">浏览器是怎样工作的</a></p>
+<p><a href="http://div.io/topic/609" target="_blank" rel="noopener">从FE的角度上再看输入url后都发生了什么</a></p>
+<p><a href="http://blog.jobbole.com/84870/" target="_blank" rel="noopener">当你在浏览器中输入Google.com并且按下回车之后发生了什么？</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://sheilacat.github.io/browser-rendering-mechanism/" data-id="ck5ccx66y0006fx055btngsb9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/repaint-and-reflow/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          重绘与重排
+        
+      </div>
+    </a>
+  
+  
+    <a href="/javascript-asynchronous-programming/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">JavaScript异步编程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+	<h3 class="widget-title">PROFILE</h3>
+	<div class="widget">
+		<div class="profile">
+			<img class="profile" />
+		  	<p>SHEILACAT</p>
+		  	<span>You said you grow old with me.</span>
+		  	<p class="link">
+		  		<a class="me-github" target="_blank" href="https://github.com/sheilaCat"></a>
+			  	<a class="me-weibo" href="#"></a>
+			  	<a class="me-zhihu" target="_blank" href="https://www.zhihu.com/people/sheilaCat"></a>
+	  	        
+	  	        	<a class="me-rss" href="/atom.xml"></a>
+		        
+		  	</p>
+	  		<div class="tags">
+	  			<span>这个杀手不太冷</span>
+	  			<span>叔本华迷妹</span>
+	  			<span>前端攻城狮</span>
+	  			<span>可能是个萌妹子</span>
+	  		</div>
+		</div>
+	</div>
+</div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-read/">2019我读了40本书：其中这9本不可错过</a>
+          </li>
+        
+          <li>
+            <a href="/weixin-tiny-program/">微信小程序概念及实践</a>
+          </li>
+        
+          <li>
+            <a href="/node-straight-out/">node直出与同构javascript</a>
+          </li>
+        
+          <li>
+            <a href="/learn-es6/">ECMAScript6学习</a>
+          </li>
+        
+          <li>
+            <a href="/javascript-error-handle/">JavaScript错误处理</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Coffeescript/">Coffeescript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/">node</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/">前端技术</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%A7%84%E8%8C%83%E5%8C%96/">前端规范化</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9B%B8%E5%85%B3/">浏览器相关</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86/">网络知识</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    <div class="widget-wrap">
+	<h3 class="widget-title">FRIENDS</h3>
+	<div class="widget">
+		<a href="http://blog.chenzuhuang.com/" target="_blank" rel="noopener">祖神的博客</a>
+	</div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 SheilaCat<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

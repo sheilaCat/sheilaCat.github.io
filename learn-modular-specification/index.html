@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>模块化规范学习 | Something here</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="目前，实现AMD的库有RequireJS、curl、Dojo、Nodules等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模块化规范学习">
+<meta property="og:url" content="http://sheilacat.github.io/learn-modular-specification/index.html">
+<meta property="og:site_name" content="Something here">
+<meta property="og:description" content="目前，实现AMD的库有RequireJS、curl、Dojo、Nodules等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-04-28T14:13:07.000Z">
+<meta property="article:modified_time" content="2016-09-18T07:34:10.000Z">
+<meta property="article:author" content="SheilaCat">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Something here" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-66121951-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=53341100" charset="UTF-8"></script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Something here</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">This world was never meant for one as beautiful as you.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://sheilacat.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-learn-modular-specification" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/learn-modular-specification/" class="article-date">
+  <time datetime="2015-04-28T14:13:07.000Z" itemprop="datePublished">2015-04-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%A7%84%E8%8C%83%E5%8C%96/">前端规范化</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      模块化规范学习
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>目前，实现AMD的库有RequireJS、curl、Dojo、Nodules等。</p>
+<a id="more"></a>
+
+<p>#CommonJS规范</p>
+<p>*CommonJS是服务器端模块的规范，Node.js采用了这个规范。Node.js首先采用了JS模块化的概念。<br>根据CommonJS规范，一个单独的文件就是一个模块。每一个模块都是一个单独的作用域，也就是说，在该模块内部定义的变量，无法被其他模块读取，除非定义为global对象的属性。</p>
+<p>输出模块变量的最好方法是使用module.exports对象。</p>
+<p>#SeaJS与RequireJS最大的区别:</p>
+<p>SeaJS对模块的态度是懒执行, 而RequireJS对模块的态度是预执行</p>
+<p>#为什么要用requireJS</p>
+<p>试想一下，如果一个网页有很多的js文件，那么浏览器在下载该页面的时候会先加载js文件，从而停止了网页的渲染，如果文件越多，浏览器可能失去响应。其次，要保证js文件的依赖性，依赖性最大的模块（文件）要放在最后加载，当依赖关系很复杂的时候，代码的编写和维护都会变得困难。</p>
+<p>RequireJS就是为了解决这两个问题而诞生的：</p>
+<p>（1）实现js文件的异步加载，避免网页失去响应；<br>（2）管理模块之间的依赖性，便于代码的编写和维护。</p>
+<p>#AMD和CMD</p>
+<p>CMD（Common Module Definition） 通用模块定义。该规范明确了模块的基本书写格式和基本交互规则。该规范是在国内发展出来的。AMD是依赖关系前置，CMD是按需加载。</p>
+<p>AMD 是 RequireJS 在推广过程中对模块定义的规范化产出。<br>CMD 是 SeaJS 在推广过程中对模块定义的规范化产出。</p>
+<p>CMD 推崇依赖就近，AMD 推崇依赖前置。看如下代码：</p>
+<p>// CMD<br>define(function(require, exports, module) {<br>var a = require(‘./a’)<br>a.doSomething()<br>// 此处略去 100 行<br>var b = require(‘./b’) // 依赖可以就近书写<br>b.doSomething()<br>// …<br>})</p>
+<p>// AMD 默认推荐的是<br>define([‘./a’, ‘./b’], function(a, b) { // 依赖必须一开始就写好<br>a.doSomething()<br>// 此处略去 100 行<br>b.doSomething()<br>…<br>}) </p>
+<p>另外一个区别是：</p>
+<p>AMD:API根据使用范围有区别，但使用同一个api接口<br>CMD:每个API的职责单一</p>
+<p>参考文章：<br><a href="http://segmentfault.com/a/1190000000733959" target="_blank" rel="noopener">http://segmentfault.com/a/1190000000733959</a></p>
+<p>#RequireJS与SeaJS的执行差异</p>
+<p>equireJS你坑的我一滚啊, 这也就是为什么我不喜欢RequireJS的原因, 坑隐藏得太深了.<br>终于明白玉伯说的那句: “RequireJS 是没有明显的 bug，SeaJS 是明显没有 bug”是什么意思了</p>
+<h2 id="因此我们得出结论-分别使用SeaJS-2-0-0和RequireJS-2-1-6进行测试"><a href="#因此我们得出结论-分别使用SeaJS-2-0-0和RequireJS-2-1-6进行测试" class="headerlink" title="因此我们得出结论(分别使用SeaJS 2.0.0和RequireJS 2.1.6进行测试)"></a>因此我们得出结论(分别使用SeaJS 2.0.0和RequireJS 2.1.6进行测试)</h2><p>SeaJS只会在真正需要使用(依赖)模块时才执行该模块<br>SeaJS是异步加载模块的没错, 但执行模块的顺序也是严格按照模块在代码中出现(require)的顺序, 这样才更符合逻辑吧! 你说呢, RequireJS?</p>
+<p>而RequireJS会先尽早地执行(依赖)模块, 相当于所有的require都被提前了, 而且模块执行的顺序也不一定100%就是先mod1再mod2<br>因此你看到执行顺序和你预想的完全不一样! 颤抖吧~ RequireJS!</p>
+<p><a href="http://www.douban.com/note/283566440/" target="_blank" rel="noopener">http://www.douban.com/note/283566440/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://sheilacat.github.io/learn-modular-specification/" data-id="ck5ccx67n0010fx059edmg68b" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/learn-linux/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Linux入门
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+	<h3 class="widget-title">PROFILE</h3>
+	<div class="widget">
+		<div class="profile">
+			<img class="profile" />
+		  	<p>SHEILACAT</p>
+		  	<span>You said you grow old with me.</span>
+		  	<p class="link">
+		  		<a class="me-github" target="_blank" href="https://github.com/sheilaCat"></a>
+			  	<a class="me-weibo" href="#"></a>
+			  	<a class="me-zhihu" target="_blank" href="https://www.zhihu.com/people/sheilaCat"></a>
+	  	        
+	  	        	<a class="me-rss" href="/atom.xml"></a>
+		        
+		  	</p>
+	  		<div class="tags">
+	  			<span>这个杀手不太冷</span>
+	  			<span>叔本华迷妹</span>
+	  			<span>前端攻城狮</span>
+	  			<span>可能是个萌妹子</span>
+	  		</div>
+		</div>
+	</div>
+</div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-read/">2019我读了40本书：其中这9本不可错过</a>
+          </li>
+        
+          <li>
+            <a href="/weixin-tiny-program/">微信小程序概念及实践</a>
+          </li>
+        
+          <li>
+            <a href="/node-straight-out/">node直出与同构javascript</a>
+          </li>
+        
+          <li>
+            <a href="/learn-es6/">ECMAScript6学习</a>
+          </li>
+        
+          <li>
+            <a href="/javascript-error-handle/">JavaScript错误处理</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Coffeescript/">Coffeescript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/">node</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/">前端技术</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%A7%84%E8%8C%83%E5%8C%96/">前端规范化</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9B%B8%E5%85%B3/">浏览器相关</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86/">网络知识</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    <div class="widget-wrap">
+	<h3 class="widget-title">FRIENDS</h3>
+	<div class="widget">
+		<a href="http://blog.chenzuhuang.com/" target="_blank" rel="noopener">祖神的博客</a>
+	</div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 SheilaCat<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
