@@ -79,4 +79,4 @@ theme: landscape
 deploy:
   type: git
   repo: https://github.com/sheilaCat/sheilacat.github.io.git
-  branch: gh-pages
+  branch: master
