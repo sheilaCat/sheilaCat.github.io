@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>JavaScript内存泄漏与内存管理 | Something here</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文说明了JavaScript中内存的生命周期，以及内存管理与内存泄漏，内存泄漏的常见情况和解决办法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript内存泄漏与内存管理">
+<meta property="og:url" content="http://sheilacat.github.io/javascript-memory-leak/index.html">
+<meta property="og:site_name" content="Something here">
+<meta property="og:description" content="本文说明了JavaScript中内存的生命周期，以及内存管理与内存泄漏，内存泄漏的常见情况和解决办法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://thumbsnap.com/i/UhcQVx2r.png?0406">
+<meta property="article:published_time" content="2016-04-06T08:22:00.000Z">
+<meta property="article:modified_time" content="2020-01-13T11:34:38.189Z">
+<meta property="article:author" content="SheilaCat">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://thumbsnap.com/i/UhcQVx2r.png?0406">
+  
+    <link rel="alternate" href="/atom.xml" title="Something here" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-66121951-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=53341100" charset="UTF-8"></script>
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Something here</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">This world was never meant for one as beautiful as you.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://sheilacat.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-javascript-memory-leak" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/javascript-memory-leak/" class="article-date">
+  <time datetime="2016-04-06T08:22:00.000Z" itemprop="datePublished">2016-04-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9B%B8%E5%85%B3/">浏览器相关</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JavaScript内存泄漏与内存管理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文说明了JavaScript中内存的生命周期，以及内存管理与内存泄漏，内存泄漏的常见情况和解决办法。</p>
+<p><img src="http://thumbsnap.com/i/UhcQVx2r.png?0406" alt="内存管理与内存泄漏"></p>
+<a id="more"></a>
+
+<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><p>JS运行的时候，会有栈内存（stack）和堆内存（heap），当我们用new实例化一个类的时候，这个new出来的对象就保存在heap里面，而这个对象的引用则存储在stack里。程序通过stack里的引用找到这个对象。例如var a = [1,2,3];，a是存储在stack里的引用，heap里存储着内容为[1,2,3]的Array对象。当栈中的变量被重新符值，原来在堆中存储的对象就会被释放，这个过程就叫垃圾回收。</p>
+<h2 id="内存生命周期"><a href="#内存生命周期" class="headerlink" title="内存生命周期"></a>内存生命周期</h2><p>不管什么程序语言，内存生命周期基本一致：   </p>
+<ol>
+<li>分配你所需要的内存</li>
+<li>使用它（读、写）</li>
+<li>当它不被使用时释放   ps：和“把大象装冰箱“一个意思</li>
+</ol>
+<p>第一二部分过程在所有语言中都很清晰。最后一步在低级语言中很清晰，但是在像JavaScript等高级语言中，最后一步不清晰。</p>
+<h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><p>JavaScript具有<strong>自动垃圾收集机制</strong>，也就是说，执行环境会负责管理代码执行过程中使用的内存。这种垃圾收集机制的原因很简单：<strong>找出那些不再继续使用的变量，然后释放其占用的内存。为此，垃圾收集器会按照固定的时间间隔（或代码执行中预定的收集时间），周期性地执行这一操作。</strong></p>
+<h3 id="引用计数算法-Reference-Counting"><a href="#引用计数算法-Reference-Counting" class="headerlink" title="引用计数算法 Reference Counting"></a>引用计数算法 Reference Counting</h3><p>这是最简单的垃圾收集算法。此算法把“对象是否不再需要”简化定义为“对象有没有其他对象引用到它”。如果没有引用指向该对象（零引用），对象将被垃圾回收机制回收。</p>
+<p><strong>限制：循环引用</strong></p>
+<p>这个简单的算法有一个限制，就是如果一个对象引用另一个（形成了循环引用），他们可能“不再需要”了，但是他们不会被回收。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> o = &#123;&#125;;</span><br><span class="line">  <span class="keyword">var</span> o2 = &#123;&#125;;</span><br><span class="line">  o.a = o2; <span class="comment">// o 引用 o2</span></span><br><span class="line">  o2.a = o; <span class="comment">// o2 引用 o</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="string">"azerty"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f();</span><br><span class="line"><span class="comment">// 两个对象被创建，并互相引用，形成了一个循环</span></span><br><span class="line"><span class="comment">// 他们被调用之后不会离开函数作用域</span></span><br><span class="line"><span class="comment">// 所以他们已经没有用了，可以被回收了</span></span><br><span class="line"><span class="comment">// 然而，引用计数算法考虑到他们互相都有至少一次引用，所以他们不会被回收</span></span><br></pre></td></tr></table></figure>
+
+<p>实际当中的例子：</p>
+<p>IE 6, 7 对DOM对象进行引用计数回收。对他们来说，一个常见问题就是内存泄露：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> div = <span class="built_in">document</span>.createElement(<span class="string">"div"</span>);</span><br><span class="line">div.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  doSomething();</span><br><span class="line">&#125;; </span><br><span class="line"><span class="comment">// div有了一个引用指向事件处理属性onclick</span></span><br><span class="line"><span class="comment">// 事件处理也有一个对div的引用可以在函数作用域中被访问到</span></span><br><span class="line"><span class="comment">// 这个循环引用会导致两个对象都不会被垃圾回收</span></span><br></pre></td></tr></table></figure>
+
+<p>我们知道，IE中有一部分对象并不是原生JavaScript对象。例如，其BOM和DOM中的对象就是使用C++以COM（Component Object Model，组件对象模型）对象的形式实现的，而COM对象的垃圾收集机制采用的就是引用计数策略。因此，即使IE的JavaScript引擎是使用标记清除策略来实现的，但JavaScript访问的COM对象依然是基于引用计数策略的。换句话说，只要在IE中涉及COM对象，就会存在循环引用的问题：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> element = <span class="built_in">document</span>.getElementById(<span class="string">"some_element"</span>);</span><br><span class="line"><span class="keyword">var</span> myObject = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">myObject.element = element;</span><br><span class="line">element.someObject = myObject;</span><br></pre></td></tr></table></figure>
+
+<p>DOM元素与原生JavaScript对象之间创建了循环引用。由于存在这个循环引用，即使将例子中的DOM从页面中移除，它也永远不会被回收。</p>
+<p>在不使用它们的时候手工断开连接：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">myObject.element = <span class="literal">null</span>;</span><br><span class="line">element.someObject = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
+
+<p>为了解决上述问题，IE9把BOM和DOM对象都转换成了真正的JavaScript对象。</p>
+<p>JavaScript引擎目前都不再使用这种算法；但在IE中访问非原生JavaScript对象（如DOM元素）时，这种算法仍然可能会导致问题。</p>
+<h3 id="标记-清除算法-Mark-and-sweep"><a href="#标记-清除算法-Mark-and-sweep" class="headerlink" title="标记-清除算法 Mark and sweep"></a>标记-清除算法 Mark and sweep</h3><p>这个算法把“对象是否不再需要”简化定义为“对象是否可以获得”。</p>
+<p>这个算法假定设置一个叫做根的对象（在Javascript里，根是全局对象）。定期的，垃圾回收器将从根开始，找所有从根开始引用的对象，然后找这些对象引用的对象……从根开始，垃圾回收器将找到所有可以获得的对象和所有不能获得的对象。</p>
+<blockquote>
+<p>垃圾回收器在运行的时候会给存储在内存中的所有变量都加上标记（当然，可以使用任何标记方式）。然后它会去掉环境中的变量以及被环境中的变量引用的变量标记。而在此之后再被加上标记的变量将被视为准备删除的变量，原因是环境中的变量已经无法访问到这些变量了。最后，垃圾收集器完成内存清除工作，销毁那些带标记的值并回收它们所占用的内存空间。</p>
+</blockquote>
+<p>这个算法比前一个要好，因为“有零引用的对象”总是不可获得的，但是相反却不一定，参考“循环引用”。</p>
+<p>从2012年起，所有现代浏览器都使用了标记-清除垃圾回收算法。所有对JavaScript垃圾回收算法的改进都是基于标记-清除算法的改进，并没有改进标记-清除算法本身和它对“对象是否不再需要”的简化定义。</p>
+<p><strong>循环引用不再是问题了</strong></p>
+<p>在上面的示例中，函数调用返回之后，两个对象从全局对象出发无法获取。因此，他们将会被垃圾回收器回收。<br>第二个示例同样，一旦 div 和其事件处理无法从根获取到，他们将会被垃圾回收器回收<br>。</p>
+<p><strong>限制: 那些无法从根对象查询到的对象都将被清除</strong></p>
+<p>尽管这是一个限制，但实践中我们很少会碰到类似的情况，所以开发者不太会去关心垃圾回收机制。</p>
+<h2 id="内存泄漏"><a href="#内存泄漏" class="headerlink" title="内存泄漏"></a>内存泄漏</h2><p>能导致内存泄漏的一定是引用类型的变量，比如函数和其他自定义对象。而值类型的变量是不存在内存泄漏的，比如字符串、数字、布尔值等。</p>
+<p>因为值类型是靠复制来传递的，而引用类型是靠类似c语言中的指针来传递的。<br>可以认为一个引用类型的变量就是一个指向某个具体的内存地址的指针。</p>
+<p>当我们用JavaScript代码创建一个引用类型的时候（以下简称对象），js引擎会在内存中开辟一块空间来存放数据，并把指针引用交给那个变量。内存是有限的，js引擎必须保证当开辟的对象没用的时候，把所分配的内存空间释放出来，这个过程叫做垃圾回收，负责回收的叫做垃圾回收器（GC）。</p>
+<p>内存泄漏是指我们已经无法再通过js代码来引用到某个对象，但垃圾回收器却认为这个对象还在被引用，因此在回收的时候不会释放它。导致了分配的这块内存永远也无法被释放出来。如果这样的情况越来越多，会导致内存不够用而系统崩溃。</p>
+<p>许多功能无需考虑内存管理即可实现，但却忽略了它可能在程序中带来重大的问题。不当清理的对象可能会存在比预期要长得多的时间。这些对象继续响应事件和消耗资源。它们可强制浏览器从一个虚拟磁盘驱动器分配内存页，这显著影响了计算机的速度（在极端的情形中，会导致浏览器崩溃）。</p>
+<p>过去导致内存泄漏的许多经典模式在现代浏览器中以不再导致泄漏内存。但是，如今有一种不同的趋势影响着内存泄漏。许多人正设计用于在没有硬页面刷新的单页中运行的 Web 应用程序。在那样的单页中，从应用程序的一个状态到另一个状态时，很容易保留不再需要或不相关的内存。</p>
+<h3 id="造成内存泄漏的主要原因"><a href="#造成内存泄漏的主要原因" class="headerlink" title="造成内存泄漏的主要原因"></a>造成内存泄漏的主要原因</h3><h4 id="循环引用"><a href="#循环引用" class="headerlink" title="循环引用"></a>循环引用</h4><p>要想破坏循环引用，引用DOM元素的对象或DOM对象的引用需要被赋值为null。</p>
+<h4 id="JavaScript闭包"><a href="#JavaScript闭包" class="headerlink" title="JavaScript闭包"></a>JavaScript闭包</h4><p>闭包可以导致内存泄露是因为内部方法保持一个对外部方法变量的引用，所以尽管方法返回了内部方法还可以继续访问在外部方法中定义的私有变量。对Javascript程序员来说最好的做法是在页面重载前断开所有的事件处理器。</p>
+<p>在一个闭包中引用的任何局部变量都会被该闭包保留，只要该闭包存在就永远保留。</p>
+<h5 id="销毁对象和对象所有权"><a href="#销毁对象和对象所有权" class="headerlink" title="销毁对象和对象所有权"></a>销毁对象和对象所有权</h5><p>一种不错的做法是，创建一个标准方法来负责让一个对象有资格被垃圾回收。destroy 功能的主要用途是，集中清理该对象完成的具有以下后果的操作的职责：</p>
+<ul>
+<li><p>阻止它的引用计数下降到0（例如，删除存在问题的事件侦听器和回调，并从任何服务取消注册）。</p>
+</li>
+<li><p>使用不必要的 CPU 周期，比如间隔或动画。</p>
+</li>
+</ul>
+<p>destroy 方法常常是清理一个对象的必要步骤，但在大多数情况下它还不够。在理论上，在销毁相关实例后，保留对已销毁对象的引用的其他对象可调用自身之上的方法。因为这种情形可能会产生不可预测的结果，所以仅在对象即将无用时调用 destroy 方法，这至关重要。</p>
+<p>一般而言，destroy 方法最佳使用是在一个对象有一个明确的所有者来负责它的生命周期时。此情形常常存在于分层系统中，比如 MVC框架中的视图或控制器，或者一个画布呈现系统的场景图。</p>
+<h4 id="DOM插入顺序"><a href="#DOM插入顺序" class="headerlink" title="DOM插入顺序"></a>DOM插入顺序</h4><p>DOM 对象应该按照从当前页面存在的最上面的 DOM 元素开始往下直到剩下的 DOM 元素的顺序添加，这样它们就总是有同样的范围，不会产生临时对象。</p>
+<h4 id="控制台日志"><a href="#控制台日志" class="headerlink" title="控制台日志"></a>控制台日志</h4><p>控制台日志记录对总体内存配置文件的影响可能是许多开发人员都未想到的极其重大的问题。记录错误的对象可以将大量数据保留在内存中。注意，这也适用于：</p>
+<ul>
+<li>在用户键入 JavaScript 时，在控制台中的一个交互式会话期间记录的对象。</li>
+<li>由 console.log 和 console.dir 方法记录的对象。</li>
+</ul>
+<h4 id="XMLHttpRequest对象泄漏"><a href="#XMLHttpRequest对象泄漏" class="headerlink" title="XMLHttpRequest对象泄漏"></a>XMLHttpRequest对象泄漏</h4><p>在IE低版本中，除了上面说的BOM和DOM对象的循环引用会造成内存泄露外，还有一个js对象也会产生泄漏，就是XMLHttpRequest对象，XMLHttpRequest在IE&lt;9会造成内存泄露，看下面的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">     <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">     xhr.largeStr = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">100000</span>).join(<span class="string">'xxoo'</span>);</span><br><span class="line">     xhr.open(<span class="string">'GET'</span>, <span class="string">'/users'</span>, <span class="literal">true</span>);</span><br><span class="line">     xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.readyState == <span class="number">4</span> &amp;&amp; <span class="keyword">this</span>.status == <span class="number">200</span>) &#123;</span><br><span class="line">           <span class="built_in">document</span>.getElementById(<span class="string">'test'</span>).innerHTML++</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;;</span><br><span class="line">     xhr.send();</span><br><span class="line">    <span class="comment">//xhr = null; 解决办法 切断xhr引用</span></span><br><span class="line">  &#125;, <span class="number">50</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>关于这个在低版本中XMLHttpRequest对象内存泄露问题，网上资源很少，英文资料也特别少，搜到一篇分析不错的文章： <a href="http://nullprogram.com/blog/2013/02/08/" target="_blank" rel="noopener">http://nullprogram.com/blog/2013/02/08/</a></p>
+<p>结合作者的理解：</p>
+<p>按照正常情况，在结束定时器闭包时，xhr及绑定事件的闭包应该被标计清除法清除掉，但是想像一下，如果真清除掉了，这个XHR实例也就没有意思了，因为后面即使请求成功了，也没有XHR来响应了。猜测浏览器内部应该是把这个xhr及闭包函数放在了一个不能被外部直接访问空间里来响应回调。并且通过一套机制来等响应成功后清除掉这块内存空间，但是早期的IE在这个设计上存在不足，没法回收。总结一句就是：XMLHttpRequest特殊就在于它是异部执行的，所以不能立马从内存中释放。</p>
+<h3 id="易出现泄露的场景"><a href="#易出现泄露的场景" class="headerlink" title="易出现泄露的场景"></a>易出现泄露的场景</h3><ol>
+<li><p>XMLHttpRequest 泄漏发生在IE7-8</p>
+</li>
+<li><p>DOM&amp;BOM等COM对象循环绑定 泄漏发生在IE6-8</p>
+</li>
+<li><p>定时器(严格上说不能算是泄露，是被闭包持有了，是正常的表现)</p>
+</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>为了预防内存泄露及持有不必要的内存，做到如下几点：</p>
+<ol>
+<li><p>在使用XMLHttpRequest，定时器等异步对象时，在函数结尾对不需要引用的对象进行释放</p>
+</li>
+<li><p>在DOM循环引用中，记得在函数结束时对循环引用切断</p>
+</li>
+</ol>
+<p>解除变量的引用不仅有助于消除循环引用现象，而且对垃圾收集也有好处。为了确保有效地回收内存，应该及时解除不再使用的全局对象、全局对象属性以及循环引用变量的引用。</p>
+<p>引用：</p>
+<p>《JavaScript高级程序设计》4.3 垃圾回收</p>
+<p><a href="https://segmentfault.com/q/1010000000414875" target="_blank" rel="noopener">内存泄漏</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Memory_Management" target="_blank" rel="noopener">MDN：内存管理</a></p>
+<p><a href="http://www.ituring.com.cn/article/109716" target="_blank" rel="noopener">关于Javascript内存泄露的那些小事儿</a>.</p>
+<p><a href="https://www.ibm.com/developerworks/cn/web/wa-jsmemory/" target="_blank" rel="noopener">了解 JavaScript 应用程序中的内存泄漏</a></p>
+<p>推荐：</p>
+<p>JavaScript内存分析实战：<a href="https://github.com/CN-Chrome-DevTools/CN-Chrome-DevTools/blob/master/md/Performance-Profiling/javascript-memory-profiling.md" target="_blank" rel="noopener">JavaScript内存分析</a></p>
+<p><a href="http://newhtml.net/v8-garbage-collection/" target="_blank" rel="noopener">V8 之旅： 垃圾回收器</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://sheilacat.github.io/javascript-memory-leak/" data-id="ck5cdksih000t3g059n8nfjnm" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/create-an-object/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          面向对象的程序设计——创建对象
+        
+      </div>
+    </a>
+  
+  
+    <a href="/reverse-proxy/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">正向代理与反向代理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+	<h3 class="widget-title">PROFILE</h3>
+	<div class="widget">
+		<div class="profile">
+			<img class="profile" />
+		  	<p>SHEILACAT</p>
+		  	<span>You said you grow old with me.</span>
+		  	<p class="link">
+		  		<a class="me-github" target="_blank" href="https://github.com/sheilaCat"></a>
+			  	<a class="me-weibo" href="#"></a>
+			  	<a class="me-zhihu" target="_blank" href="https://www.zhihu.com/people/sheilaCat"></a>
+	  	        
+	  	        	<a class="me-rss" href="/atom.xml"></a>
+		        
+		  	</p>
+	  		<div class="tags">
+	  			<span>这个杀手不太冷</span>
+	  			<span>叔本华迷妹</span>
+	  			<span>前端攻城狮</span>
+	  			<span>可能是个萌妹子</span>
+	  		</div>
+		</div>
+	</div>
+</div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-read/">2019我读了40本书：其中这9本不可错过</a>
+          </li>
+        
+          <li>
+            <a href="/weixin-tiny-program/">微信小程序概念及实践</a>
+          </li>
+        
+          <li>
+            <a href="/node-straight-out/">node直出与同构javascript</a>
+          </li>
+        
+          <li>
+            <a href="/learn-es6/">ECMAScript6学习</a>
+          </li>
+        
+          <li>
+            <a href="/javascript-error-handle/">JavaScript错误处理</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Coffeescript/">Coffeescript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mongodb/">mongodb</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/node/">node</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF/">前端技术</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E8%A7%84%E8%8C%83%E5%8C%96/">前端规范化</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9B%B8%E5%85%B3/">浏览器相关</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86/">网络知识</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    <div class="widget-wrap">
+	<h3 class="widget-title">FRIENDS</h3>
+	<div class="widget">
+		<a href="http://blog.chenzuhuang.com/" target="_blank" rel="noopener">祖神的博客</a>
+	</div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 SheilaCat<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
